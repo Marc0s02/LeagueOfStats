@@ -1,0 +1,11 @@
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/App.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/data/CDragonClient.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/data/CacheManager.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/data/ChampionRepository.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/model/Build.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/model/Champion.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/model/Item.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/model/Role.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/model/Stats.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/service/StatCalculator.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ui/MainController.java

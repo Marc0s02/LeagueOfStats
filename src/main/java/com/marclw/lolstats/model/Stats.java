@@ -32,7 +32,15 @@ public class Stats {
      * Returns a new Stats combining this and other (e.g. base stats + item bonuses).
      */
     public Stats add(Stats other) {
-        return null;
+        return new Stats(
+                this.hp + other.hp,
+                this.attackDamage + other.attackDamage,
+                this.abilityPower + other.abilityPower,
+                this.armor + other.armor,
+                this.magicResist + other.magicResist,
+                this.attackSpeed + other.attackSpeed,
+                this.moveSpeed + other.moveSpeed
+        );
     }
 
     public double getHp() {
