@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Placeholder FXML for the main screen.
+    Delete this (and skip FXMLLoader in App.java) if you'd rather build the
+    scene graph directly in Java code instead.
+-->
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Label?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.marclw.lolstats.ui.MainController">
+    <center>
+        <Label text="LoL Champion Stat Calculator - TODO" />
+    </center>
+</BorderPane>
