@@ -1,4 +1,4 @@
-package com.marclw.lolstats.data;
+package com.marclw.lolstats.ingest;
 
 import org.junit.jupiter.api.Test;
 
