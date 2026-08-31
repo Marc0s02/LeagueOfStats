@@ -1,6 +1,6 @@
-package com.marclw.lolstats.ui;
+package com.marclw.lolstats.ui.calculator;
 
-import com.marclw.lolstats.data.ChampionRepository;
+import com.marclw.lolstats.ingest.ChampionRepository;
 import com.marclw.lolstats.service.StatCalculator;
 
 /**

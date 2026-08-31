@@ -1,4 +1,4 @@
-package com.marclw.lolstats.data;
+package com.marclw.lolstats.ingest;
 
 /**
  * Talks to Community Dragon (raw.communitydragon.org) to fetch raw champion,

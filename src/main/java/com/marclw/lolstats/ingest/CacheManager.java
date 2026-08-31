@@ -1,4 +1,4 @@
-package com.marclw.lolstats.data;
+package com.marclw.lolstats.ingest;
 
 import com.marclw.lolstats.model.Champion;
 import com.marclw.lolstats.model.Item;

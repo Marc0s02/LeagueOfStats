@@ -11,7 +11,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.marclw.lolstats.ui.MainController">
+            fx:controller="com.marclw.lolstats.ui.calculator.MainController">
     <center>
         <Label text="LoL Champion Stat Calculator - TODO" />
     </center>
