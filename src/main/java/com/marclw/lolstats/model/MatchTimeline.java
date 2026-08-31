@@ -144,8 +144,28 @@ public class MatchTimeline {
     /**
      * Convenience lookup used by FeatureExtractor to grab the frame closest
      * to (but not after) a requested minute - e.g. "state at 15 minutes".
+     *
+     * Deliberately "latest frame at or before minute" rather than requiring
+     * an exact match: a live game's current minute won't always land
+     * exactly on a frame boundary, and a finished game might be shorter
+     * than the requested minute (e.g. asking for minute 30 on a 22-minute
+     * game) - in that case this returns the last available frame rather
+     * than null, since "state at game end" is still a meaningful answer.
+     * Returns null only if there are no frames at or before the minute at
+     * all (e.g. an empty timeline, or minute 0 with no frame yet).
      */
     public Frame getFrameAtMinute(int minute) {
-        return null;
+        if (frames == null || frames.isEmpty()) {
+            return null;
+        }
+        Frame best = null;
+        for (Frame frame : frames) {
+            if (frame.getMinute() <= minute) {
+                if (best == null || frame.getMinute() > best.getMinute()) {
+                    best = frame;
+                }
+            }
+        }
+        return best;
     }
 }

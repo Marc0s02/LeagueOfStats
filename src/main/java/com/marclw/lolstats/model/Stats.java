@@ -24,8 +24,18 @@ public class Stats {
         this.moveSpeed = moveSpeed;
     }
 
+    /**
+     * Naive sum of every stat field. Because these fields are on wildly
+     * different scales (hp is in the hundreds/thousands, moveSpeed ~300-500,
+     * attackSpeed is a small fraction), this is NOT a meaningful "power
+     * score" on its own - it exists as a quick, cheap sort key for the
+     * TableView (e.g. "total stat points"), not as anything to feed into
+     * FeatureExtractor or present as a real power comparison. If the UI
+     * needs an actual weighted power rating later, that should be a
+     * separate method with explicit per-stat weights, not this one.
+     */
     public double getTotal() {
-        return 0;
+        return hp + attackDamage + abilityPower + armor + magicResist + attackSpeed + moveSpeed;
     }
 
     /**

@@ -12,31 +12,66 @@ import com.marclw.lolstats.model.MatchTimeline;
  */
 public class TeamAggregator {
 
+    // All diffs are blue-minus-red, matching FeatureVector's sign convention
+    // (positive = blue ahead) - keep that convention consistent if more
+    // diff methods are added later, since FeatureExtractor doesn't flip
+    // signs itself.
+
     public int goldDiffAtMinute(MatchTimeline timeline, int minute) {
-        return 0;
+        MatchTimeline.Frame frame = timeline.getFrameAtMinute(minute);
+        if (frame == null) {
+            return 0;
+        }
+        return frame.getBlueTotalGold() - frame.getRedTotalGold();
     }
 
     public int xpDiffAtMinute(MatchTimeline timeline, int minute) {
-        return 0;
+        MatchTimeline.Frame frame = timeline.getFrameAtMinute(minute);
+        if (frame == null) {
+            return 0;
+        }
+        return frame.getBlueTotalXp() - frame.getRedTotalXp();
     }
 
     public int dragonDiffAtMinute(MatchTimeline timeline, int minute) {
-        return 0;
+        MatchTimeline.Frame frame = timeline.getFrameAtMinute(minute);
+        if (frame == null) {
+            return 0;
+        }
+        return frame.getBlueDragonKills() - frame.getRedDragonKills();
     }
 
     public int heraldDiffAtMinute(MatchTimeline timeline, int minute) {
-        return 0;
+        MatchTimeline.Frame frame = timeline.getFrameAtMinute(minute);
+        if (frame == null) {
+            return 0;
+        }
+        return frame.getBlueHeraldKills() - frame.getRedHeraldKills();
     }
 
     public int towerDiffAtMinute(MatchTimeline timeline, int minute) {
-        return 0;
+        MatchTimeline.Frame frame = timeline.getFrameAtMinute(minute);
+        if (frame == null) {
+            return 0;
+        }
+        return frame.getBlueTowersDestroyed() - frame.getRedTowersDestroyed();
     }
 
     /**
-     * Kill diff isn't in MatchTimeline.Frame directly (only final
-     * MatchRecord has a clean per-player kill count) - this likely needs
-     * to derive kills-so-far from timeline event data instead, once that's
-     * added to MatchTimeline. Left as a clear TODO rather than guessed at.
+     * NOT YET IMPLEMENTED - kill count isn't in MatchTimeline.Frame at all
+     * (it only tracks gold/XP/objectives), and MatchRecord only has each
+     * player's FINAL kill count, not kills-so-far at an arbitrary minute.
+     * Getting this right needs one of:
+     *   (a) Riot's timeline "CHAMPION_KILL" events (a per-frame events
+     *       list Match-V5 timelines actually include, not yet modeled on
+     *       Frame here), summed up to the requested minute, or
+     *   (b) a simpler proxy if (a) proves too fiddly for the project's
+     *       time budget - e.g. skip kill diff as a feature entirely and
+     *       rely on gold/XP diff, which already captures most of the same
+     *       signal (kills grant gold).
+     * Left returning 0 (rather than guessing) so this doesn't silently
+     * masquerade as working - FeatureExtractor.killDiffAtMinute will need
+     * revisiting alongside whichever option is picked.
      */
     public int killDiffAtMinute(MatchRecord match, MatchTimeline timeline, int minute) {
         return 0;
