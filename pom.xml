@@ -29,11 +29,16 @@
             <version>${javafx.version}</version>
         </dependency>
 
-        <!-- Swap for Jackson if you'd rather use that instead -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.11.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.haifengl</groupId>
+            <artifactId>smile-core</artifactId>
+            <version>3.1.1</version>
         </dependency>
 
         <dependency>
