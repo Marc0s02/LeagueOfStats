@@ -1,10 +1,13 @@
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/App.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/Smoke.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/features/FeatureExtractor.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/features/FeatureSpec.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/features/TeamAggregator.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ingest/CDragonClient.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ingest/CacheManager.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ingest/ChampionDetailParser.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ingest/ChampionRepository.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ingest/DataDragonClient.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ingest/HistoricalDatasetLoader.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ingest/RiotMatchClient.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ingest/RiotSpectatorClient.java
@@ -26,5 +29,4 @@
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/training/ModelTrainer.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ui/ViewManager.java
 /home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ui/calculator/MainController.java
-/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ui/prediction/PredictionView/PredictionController.java
-/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ui/prediction/PredictionView/fxml.java
+/home/marclw/Documents/PersonalCode/Data Engineering/LeagueOfStats/src/main/java/com/marclw/lolstats/ui/prediction/PredictionController.java

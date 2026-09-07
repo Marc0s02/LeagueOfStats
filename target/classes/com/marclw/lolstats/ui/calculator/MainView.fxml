@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Placeholder FXML for the main screen.
+    Delete this (and skip FXMLLoader in App.java) if you'd rather build the
+    scene graph directly in Java code instead.
+-->
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.marclw.lolstats.ui.calculator.MainController">
+    <center>
+        <Label text="LoL Champion Stat Calculator - TODO" />
+    </center>
+    <bottom>
+        <!-- Hands off to ViewManager.showPredictionView() -->
+        <Button fx:id="switchToPredictionButton" text="Switch to Match Prediction"
+                onAction="#onSwitchToPrediction" BorderPane.alignment="CENTER" />
+    </bottom>
+</BorderPane>
