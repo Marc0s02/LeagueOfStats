@@ -8,6 +8,7 @@
 
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -15,4 +16,9 @@
     <center>
         <Label text="LoL Champion Stat Calculator - TODO" />
     </center>
+    <bottom>
+        <!-- Hands off to ViewManager.showPredictionView() -->
+        <Button fx:id="switchToPredictionButton" text="Switch to Match Prediction"
+                onAction="#onSwitchToPrediction" BorderPane.alignment="CENTER" />
+    </bottom>
 </BorderPane>
