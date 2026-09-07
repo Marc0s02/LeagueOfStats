@@ -3,6 +3,7 @@ package com.marclw.lolstats.ingest;
 import com.marclw.lolstats.model.Champion;
 import com.marclw.lolstats.model.Role;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ChampionRepository {
@@ -17,20 +18,39 @@ public class ChampionRepository {
         this.cacheManager = cacheManager;
     }
 
+    /**
+     * Ensures the cache is fresh (fetching if needed), loads it, and caches
+     * the result in-memory for the rest of this call - findByName()/
+     * filterByRole() work against that in-memory list rather than re-reading
+     * from disk each time.
+     */
     public List<Champion> loadAll() {
-        return null;
+        cacheManager.checkForUpdates();
+        champions = cacheManager.loadCachedChampions();
+        return champions;
     }
 
     public Champion findByName(String name) {
-        return null;
+        if (champions == null) {
+            loadAll();
+        }
+        return champions.stream()
+                .filter(c -> c.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Champion> filterByRole(Role role) {
-        return null;
+        if (champions == null) {
+            loadAll();
+        }
+        return champions.stream()
+                .filter(c -> c.getRoles() != null && c.getRoles().contains(role))
+                .toList();
     }
 
     public List<Champion> getChampions() {
-        return champions;
+        return champions == null ? Collections.emptyList() : champions;
     }
 
     public void setChampions(List<Champion> champions) {
