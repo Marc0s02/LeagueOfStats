@@ -1,65 +1,52 @@
 package com.marclw.lolstats.ingest;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.marclw.lolstats.model.Stats;
 
 /**
- * Parses a single champions/{id}.json response into base Stats + per-level
- * growth Stats.
+ * Parses ONE champion's entry from Data Dragon's champion.json "data"
+ * object into base Stats + per-level growth Stats.
  *
- * Deliberately defensive: statValue() looks values up by name from a raw
- * JsonObject rather than binding fixed Gson DTO fields, so a wrong guess
- * about one key's exact spelling returns 0.0 for that one stat instead of
- * throwing and breaking every champion's parse.
+ * Schema (verified, stable, officially documented by Riot):
+ *   "stats": {
+ *     "hp": ..., "hpperlevel": ...,
+ *     "armor": ..., "armorperlevel": ...,
+ *     "spellblock": ..., "spellblockperlevel": ...,   (magic resist)
+ *     "attackdamage": ..., "attackdamageperlevel": ...,
+ *     "movespeed": ...,
+ *     "attackspeedoffset": ..., "attackspeedperlevel": ...
+ *   }
+ *
  */
 public class ChampionDetailParser {
 
-    public Stats parseBaseStats(String championDetailJson) {
-        JsonObject stats = statsBlock(championDetailJson);
+    public Stats parseBaseStats(JsonObject statsJson) {
         return new Stats(
-                statValue(stats, "hp", "flat"),
-                statValue(stats, "attackDamage", "flat"),
-                0, // champions have no innate ability power stat
-                statValue(stats, "armor", "flat"),
-                statValue(stats, "magicResistance", "flat"),
-                statValue(stats, "attackSpeed", "flat"),
-                topLevelValue(championDetailJson, "movementSpeed")
-        );
-    }
-
-    public Stats parsePerLevelGrowth(String championDetailJson) {
-        JsonObject stats = statsBlock(championDetailJson);
-        return new Stats(
-                statValue(stats, "hp", "perLevel"),
-                statValue(stats, "attackDamage", "perLevel"),
+                value(statsJson, "hp"),
+                value(statsJson, "attackdamage"),
                 0,
-                statValue(stats, "armor", "perLevel"),
-                statValue(stats, "magicResistance", "perLevel"),
-                statValue(stats, "attackSpeed", "perLevel"),
-                0 // move speed doesn't scale per level
+                value(statsJson, "armor"),
+                value(statsJson, "spellblock"),
+                value(statsJson, "attackspeed"),   // base AS is now given directly
+                value(statsJson, "movespeed")
         );
     }
 
-    private JsonObject statsBlock(String championDetailJson) {
-        JsonObject root = JsonParser.parseString(championDetailJson).getAsJsonObject();
-        JsonElement stats = root.get("stats");
-        return stats != null && stats.isJsonObject() ? stats.getAsJsonObject() : new JsonObject();
+    public Stats parsePerLevelGrowth(JsonObject statsJson) {
+        double baseAttackSpeed = value(statsJson, "attackspeed");
+        double approxAttackSpeedPerLevel = baseAttackSpeed * (value(statsJson, "attackspeedperlevel") / 100.0);
+        return new Stats(
+                value(statsJson, "hpperlevel"),
+                value(statsJson, "attackdamageperlevel"),
+                0,
+                value(statsJson, "armorperlevel"),
+                value(statsJson, "spellblockperlevel"),
+                approxAttackSpeedPerLevel,
+                0
+        );
     }
 
-    private double statValue(JsonObject stats, String statName, String subField) {
-        JsonElement stat = stats.get(statName);
-        if (stat == null || !stat.isJsonObject()) {
-            return 0.0;
-        }
-        JsonElement value = stat.getAsJsonObject().get(subField);
-        return value != null && value.isJsonPrimitive() ? value.getAsDouble() : 0.0;
-    }
-
-    private double topLevelValue(String championDetailJson, String fieldName) {
-        JsonObject root = JsonParser.parseString(championDetailJson).getAsJsonObject();
-        JsonElement value = root.get(fieldName);
-        return value != null && value.isJsonPrimitive() ? value.getAsDouble() : 0.0;
+    private double value(JsonObject statsJson, String fieldName) {
+        return statsJson.has(fieldName) ? statsJson.get(fieldName).getAsDouble() : 0.0;
     }
 }

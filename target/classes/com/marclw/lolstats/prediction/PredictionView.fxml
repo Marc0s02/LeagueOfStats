@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Placeholder FXML for the live/match-prediction screen.
+    Expected eventual contents: a match-ID/live-game selector, a "Predict"
+    button wired to PredictionService, and a win-probability display
+    (e.g. a ProgressBar or a simple line chart of probability over time).
+-->
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.marclw.lolstats.ui.prediction.PredictionController">
+    <center>
+        <Label text="Match Win Prediction - TODO" />
+    </center>
+    <bottom>
+        <!-- Hands off to ViewManager.showCalculatorView() -->
+        <Button fx:id="switchToCalculatorButton" text="Back to Stat Calculator"
+                onAction="#onSwitchToCalculator" BorderPane.alignment="CENTER" />
+    </bottom>
+</BorderPane>
