@@ -1,11 +1,11 @@
 package com.marclw.lolstats.ui;
 
 import com.marclw.lolstats.ingest.ChampionRepository;
+import com.marclw.lolstats.ingest.ItemRepository;
 import com.marclw.lolstats.prediction.PredictionService;
 import com.marclw.lolstats.service.StatCalculator;
 import com.marclw.lolstats.ui.calculator.MainController;
 import com.marclw.lolstats.ui.prediction.PredictionController;
-import com.marclw.lolstats.ingest.ItemRepository;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,23 +20,26 @@ import java.io.IOException;
  * this class so either one can ask to switch to the other.
  *
  * Also owns the shared services both views depend on (ChampionRepository,
- * StatCalculator, PredictionService), so neither controller has to
- * construct its own copies.
+ * ItemRepository, StatCalculator, PredictionService), so neither controller
+ * has to construct its own copies.
  */
 public class ViewManager {
 
     private final Stage primaryStage;
 
     private final ChampionRepository championRepository;
+    private final ItemRepository itemRepository;
     private final StatCalculator statCalculator;
     private final PredictionService predictionService;
 
     public ViewManager(Stage primaryStage,
                        ChampionRepository championRepository,
+                       ItemRepository itemRepository,
                        StatCalculator statCalculator,
                        PredictionService predictionService) {
         this.primaryStage = primaryStage;
         this.championRepository = championRepository;
+        this.itemRepository = itemRepository;
         this.statCalculator = statCalculator;
         this.predictionService = predictionService;
     }
@@ -49,9 +52,9 @@ public class ViewManager {
 
             MainController controller = loader.getController();
             controller.setChampionRepository(championRepository);
+            controller.setItemRepository(itemRepository);
             controller.setStatCalculator(statCalculator);
             controller.setViewManager(this);
-            controller.setItemRepository(itemRepository);
             controller.populateData();
 
             primaryStage.setScene(new Scene(root));
@@ -78,19 +81,5 @@ public class ViewManager {
             // TODO: replace with real error handling/logging
             e.printStackTrace();
         }
-    }
-
-    private final ItemRepository itemRepository;
-
-    public ViewManager(Stage primaryStage,
-                       ChampionRepository championRepository,
-                       ItemRepository itemRepository,
-                       StatCalculator statCalculator,
-                       PredictionService predictionService) {
-        this.primaryStage = primaryStage;
-        this.championRepository = championRepository;
-        this.itemRepository = itemRepository;
-        this.statCalculator = statCalculator;
-        this.predictionService = predictionService;
     }
 }
