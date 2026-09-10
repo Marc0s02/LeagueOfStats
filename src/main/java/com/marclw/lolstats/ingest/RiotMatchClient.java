@@ -6,6 +6,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * Talks to Riot's Match-V5 API. Regionally routed (americas/europe/asia/sea),
@@ -95,6 +97,20 @@ public class RiotMatchClient {
         public MatchNotFoundException(String url) {
             super("Not found (404): " + url);
         }
+    }
+
+    /**
+     * Account-V1, not Match-V5, but same regional routing (americas/europe/
+     * asia/sea) as everything else on this client, so it lives here rather
+     * than in a separate class. Riot ID looks like "gameName#tagLine" -
+     * split on the # before calling.
+     */
+    public String fetchPuuidByRiotId(String gameName, String tagLine) {
+        String url = regionalBaseUrl + "/riot/account/v1/accounts/by-riot-id/"
+                + gameName + "/" + tagLine;
+        String json = get(url);
+        JsonObject root = JsonParser.parseString(json).getAsJsonObject();
+        return root.get("puuid").getAsString();
     }
 
     public String getApiKey() {
