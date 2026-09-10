@@ -3,13 +3,13 @@ package com.marclw.lolstats;
 import com.marclw.lolstats.ingest.CDragonClient;
 import com.marclw.lolstats.ingest.CacheManager;
 import com.marclw.lolstats.ingest.ChampionRepository;
+import com.marclw.lolstats.ingest.ItemRepository;
 import com.marclw.lolstats.prediction.PredictionService;
 import com.marclw.lolstats.service.StatCalculator;
 import com.marclw.lolstats.storage.ModelRegistry;
 import com.marclw.lolstats.ui.ViewManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import com.marclw.lolstats.ingest.ItemRepository;
 
 import java.nio.file.Path;
 
@@ -25,8 +25,6 @@ public class App extends Application {
                 Path.of(System.getProperty("user.home"), ".lolstats"), cDragonClient);
         ChampionRepository championRepository = new ChampionRepository(cacheManager);
         ItemRepository itemRepository = new ItemRepository(cacheManager);
-        ViewManager viewManager = new ViewManager(
-                primaryStage, championRepository, itemRepository, statCalculator, predictionService);
         StatCalculator statCalculator = new StatCalculator();
 
         // TODO: construct real RiotMatchClient/RiotSpectatorClient + ModelRegistry
@@ -38,7 +36,7 @@ public class App extends Application {
         // thread) before the calculator view needs champion/item data.
 
         ViewManager viewManager = new ViewManager(
-                primaryStage, championRepository, statCalculator, predictionService);
+                primaryStage, championRepository, itemRepository, statCalculator, predictionService);
         viewManager.showCalculatorView();
 
         primaryStage.show();
