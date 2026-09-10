@@ -5,6 +5,7 @@ import com.marclw.lolstats.prediction.PredictionService;
 import com.marclw.lolstats.service.StatCalculator;
 import com.marclw.lolstats.ui.calculator.MainController;
 import com.marclw.lolstats.ui.prediction.PredictionController;
+import com.marclw.lolstats.ingest.ItemRepository;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -50,6 +51,8 @@ public class ViewManager {
             controller.setChampionRepository(championRepository);
             controller.setStatCalculator(statCalculator);
             controller.setViewManager(this);
+            controller.setItemRepository(itemRepository);
+            controller.populateData();
 
             primaryStage.setScene(new Scene(root));
             primaryStage.setTitle("LeagueOfStats - Champion Comparison");
@@ -75,5 +78,19 @@ public class ViewManager {
             // TODO: replace with real error handling/logging
             e.printStackTrace();
         }
+    }
+
+    private final ItemRepository itemRepository;
+
+    public ViewManager(Stage primaryStage,
+                       ChampionRepository championRepository,
+                       ItemRepository itemRepository,
+                       StatCalculator statCalculator,
+                       PredictionService predictionService) {
+        this.primaryStage = primaryStage;
+        this.championRepository = championRepository;
+        this.itemRepository = itemRepository;
+        this.statCalculator = statCalculator;
+        this.predictionService = predictionService;
     }
 }
