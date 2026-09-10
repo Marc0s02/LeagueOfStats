@@ -32,6 +32,24 @@ public class MatchTimeline {
         private int redHeraldKills;
         private int blueTowersDestroyed;
         private int redTowersDestroyed;
+        private int blueChampionKills;
+        private int redChampionKills;
+
+        public int getBlueChampionKills() {
+            return blueChampionKills;
+        }
+
+        public void setBlueChampionKills(int blueChampionKills) {
+            this.blueChampionKills = blueChampionKills;
+        }
+
+        public int getRedChampionKills() {
+            return redChampionKills;
+        }
+
+        public void setRedChampionKills(int redChampionKills) {
+            this.redChampionKills = redChampionKills;
+        }
 
         public Frame() {
         }
