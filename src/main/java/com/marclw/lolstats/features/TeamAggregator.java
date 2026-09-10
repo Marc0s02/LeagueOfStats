@@ -73,7 +73,19 @@ public class TeamAggregator {
      * masquerade as working - FeatureExtractor.killDiffAtMinute will need
      * revisiting alongside whichever option is picked.
      */
+    /**
+     * Now backed by real data: MatchDataParser accumulates CHAMPION_KILL
+     * events per team into Frame.blueChampionKills/redChampionKills, resolved
+     * via a participantId -> team map (see MatchDataParser.buildParticipantTeamMap),
+     * not the "1-5 is blue" assumption. The match parameter is unused now that
+     * kills live on the Frame itself, but kept for signature stability with
+     * FeatureExtractor's existing call site.
+     */
     public int killDiffAtMinute(MatchRecord match, MatchTimeline timeline, int minute) {
-        return 0;
+        MatchTimeline.Frame frame = timeline.getFrameAtMinute(minute);
+        if (frame == null) {
+            return 0;
+        }
+        return frame.getBlueChampionKills() - frame.getRedChampionKills();
     }
 }
