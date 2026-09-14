@@ -51,6 +51,8 @@ public class MatchDataParser {
             stats.setTotalDamageDealtToChampions(p.get("totalDamageDealtToChampions").getAsInt());
             stats.setVisionScore(p.get("visionScore").getAsInt());
             stats.setFinalItemIds(parseFinalItemIds(p));
+            stats.setFinalItemIds(parseFinalItemIds(p));
+            stats.setTeamPosition(p.has("teamPosition") ? p.get("teamPosition").getAsString() : "");
 
             if (p.get("teamId").getAsInt() == 100) {
                 bluePlayers.add(stats);

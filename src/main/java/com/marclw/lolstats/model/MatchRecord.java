@@ -42,6 +42,20 @@ public class MatchRecord {
         // should usually exclude it rather than treating it as a 7th item.
         private List<Integer> finalItemIds;
 
+        // TOP/JUNGLE/MIDDLE/BOTTOM/UTILITY - Riot's Match-V5 field for lane
+        // assignment. Can be an empty string for non-standard game modes
+        // (Arena, etc.) where lanes don't apply - callers should treat "" the
+        // same as unknown, not as a fifth real lane.
+        private String teamPosition;
+
+        public String getTeamPosition() {
+            return teamPosition;
+        }
+
+        public void setTeamPosition(String teamPosition) {
+            this.teamPosition = teamPosition;
+        }
+
         public PlayerStats() {
         }
 
