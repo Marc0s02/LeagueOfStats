@@ -37,6 +37,10 @@ public class MatchRecord {
         private int goldEarned;
         private int totalDamageDealtToChampions;
         private int visionScore;
+        // item0-item6 from Match-V5, with empty slots (id 0) filtered out.
+        // item6 is the trinket slot - callers building "core build" stats
+        // should usually exclude it rather than treating it as a 7th item.
+        private List<Integer> finalItemIds;
 
         public PlayerStats() {
         }
@@ -103,6 +107,14 @@ public class MatchRecord {
 
         public void setVisionScore(int visionScore) {
             this.visionScore = visionScore;
+        }
+
+        public List<Integer> getFinalItemIds() {
+            return finalItemIds;
+        }
+
+        public void setFinalItemIds(List<Integer> finalItemIds) {
+            this.finalItemIds = finalItemIds;
         }
     }
 
