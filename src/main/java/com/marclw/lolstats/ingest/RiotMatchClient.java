@@ -108,8 +108,7 @@ public class RiotMatchClient {
     public String fetchPuuidByRiotId(String gameName, String tagLine) {
         String url = regionalBaseUrl + "/riot/account/v1/accounts/by-riot-id/"
                 + gameName + "/" + tagLine;
-        String json = get(url);
-        JsonObject root = JsonParser.parseString(json).getAsJsonObject();
+        JsonObject root = JsonParser.parseString(get(url)).getAsJsonObject();
         return root.get("puuid").getAsString();
     }
 
