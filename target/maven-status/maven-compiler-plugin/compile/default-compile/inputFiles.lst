@@ -8,8 +8,13 @@ D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\inge
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\ChampionRepository.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\DataDragonClient.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\HistoricalDatasetLoader.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\ItemRepository.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\MatchDataParser.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\MatchFetcher.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\RiotMatchClient.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\RiotSpectatorClient.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\SmokeMatch.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\SmokeMatchIds.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\Build.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\Champion.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\FeatureVector.java
@@ -18,6 +23,7 @@ D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\mode
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\MatchTimeline.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\Role.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\Stats.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\prediction\ModelScorer.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\prediction\PredictionService.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\prediction\WinProbabilityResult.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\service\StatCalculator.java
@@ -27,6 +33,7 @@ D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\stor
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\training\DatasetBuilder.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\training\ModelEvaluator.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\training\ModelTrainer.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\training\TrainingPipelineRunner.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ui\calculator\MainController.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ui\prediction\PredictionController.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ui\ViewManager.java
