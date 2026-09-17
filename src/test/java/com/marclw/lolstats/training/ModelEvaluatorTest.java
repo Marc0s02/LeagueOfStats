@@ -3,6 +3,7 @@ package com.marclw.lolstats.training;
 import com.marclw.lolstats.features.FeatureSpec;
 import com.marclw.lolstats.model.FeatureVector;
 import org.junit.jupiter.api.Test;
+import smile.classification.AbstractClassifier;
 import smile.classification.Classifier;
 
 import java.util.ArrayList;
@@ -33,7 +34,10 @@ class ModelEvaluatorTest {
      */
     private Classifier<double[]> goldSignClassifier() {
         int goldIndex = FeatureSpec.FEATURE_NAMES.indexOf("goldDiffAtMinute");
-        return new Classifier<>() {
+        // Extends AbstractClassifier (not Classifier directly) so classes()
+        // comes from the int[] {0, 1} passed to the constructor, matching
+        // how every real Smile classifier here is built.
+        return new AbstractClassifier<double[]>(new int[]{0, 1}) {
             @Override
             public int predict(double[] x) {
                 return x[goldIndex] > 0 ? 1 : 0;
@@ -50,11 +54,6 @@ class ModelEvaluatorTest {
             @Override
             public boolean isSoft() {
                 return true;
-            }
-
-            @Override
-            public int numClasses() {
-                return 2;
             }
         };
     }
