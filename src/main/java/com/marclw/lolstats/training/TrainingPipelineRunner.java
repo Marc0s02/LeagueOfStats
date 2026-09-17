@@ -10,7 +10,7 @@ import com.marclw.lolstats.model.FeatureVector;
 import com.marclw.lolstats.service.StatCalculator;
 import com.marclw.lolstats.storage.FeatureStore;
 import com.marclw.lolstats.storage.ModelRegistry;
-import smile.classification.SoftClassifier;
+import smile.classification.Classifier;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -157,7 +157,7 @@ public class TrainingPipelineRunner {
 
         // --- Train -------------------------------------------------------
         ModelTrainer trainer = new ModelTrainer();
-        SoftClassifier<double[]> model = trainer.trainLogisticRegression(trainRows);
+        Classifier<double[]> model = trainer.trainLogisticRegression(trainRows);
         System.out.println("Trained logistic regression on FeatureSpec " + FeatureSpec.VERSION + ".");
 
         // --- Evaluate ----------------------------------------------------
