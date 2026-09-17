@@ -1,7 +1,10 @@
 com\marclw\lolstats\training\DatasetBuilderTest.class
 com\marclw\lolstats\storage\ModelRegistryTest.class
+com\marclw\lolstats\training\ModelTrainerTest.class
 com\marclw\lolstats\ingest\CacheManagerTest.class
 com\marclw\lolstats\service\StatCalculatorTest.class
 com\marclw\lolstats\storage\FeatureStoreTest.class
+com\marclw\lolstats\training\ModelEvaluatorTest$GoldSignClassifier.class
+com\marclw\lolstats\training\ModelEvaluatorTest.class
 com\marclw\lolstats\features\FeatureExtractorTest.class
 com\marclw\lolstats\model\StatsTest.class
