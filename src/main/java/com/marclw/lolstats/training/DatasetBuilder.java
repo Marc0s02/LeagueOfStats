@@ -5,6 +5,7 @@ import com.marclw.lolstats.model.FeatureVector;
 import com.marclw.lolstats.model.MatchRecord;
 import com.marclw.lolstats.model.MatchTimeline;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,10 +38,26 @@ public class DatasetBuilder {
      *                  outcome from 15-minute state. Could later be
      *                  extended to sample multiple minutes per match
      *                  instead of a single fixed one.
+     *
+     * Matches with no corresponding timeline are silently skipped rather
+     * than throwing - some matches genuinely have no timeline available
+     * (very old matches, some game modes; see RiotMatchClient's doc on
+     * fetchMatchTimeline), and failing the whole batch over a handful of
+     * those would be worse than just excluding them from training.
      */
     public List<FeatureVector> buildTrainingSet(List<MatchRecord> matches,
                                                 Map<String, MatchTimeline> timelines,
                                                 int minute) {
-        return null;
+        List<FeatureVector> rows = new ArrayList<>();
+        for (MatchRecord match : matches) {
+            MatchTimeline timeline = timelines.get(match.getMatchId());
+            if (timeline == null) {
+                continue;
+            }
+            FeatureVector vector = featureExtractor.extract(match, timeline, minute);
+            vector.setBlueTeamWon("BLUE".equals(match.getWinningTeam()));
+            rows.add(vector);
+        }
+        return rows;
     }
 }
