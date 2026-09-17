@@ -7,7 +7,7 @@ import com.marclw.lolstats.model.FeatureVector;
 import com.marclw.lolstats.model.MatchRecord;
 import com.marclw.lolstats.model.MatchTimeline;
 import com.marclw.lolstats.storage.ModelRegistry;
-import smile.classification.SoftClassifier;
+import smile.classification.Classifier;
 
 /**
  * Online path: what actually runs when a user asks for a prediction from
@@ -34,7 +34,7 @@ public class PredictionService {
      * every single prediction. Not thread-safe by design - JavaFX calls
      * this from the application thread.
      */
-    private SoftClassifier<double[]> cachedModel;
+    private Classifier<double[]> cachedModel;
 
     public PredictionService(ModelRegistry modelRegistry,
                              RiotMatchClient matchClient,
@@ -110,7 +110,7 @@ public class PredictionService {
         return timeline.getFrames() == null ? 0 : timeline.getFrames().size() - 1;
     }
 
-    private SoftClassifier<double[]> model() {
+    private Classifier<double[]> model() {
         if (cachedModel == null) {
             cachedModel = modelRegistry.loadModel();
         }
