@@ -4,7 +4,7 @@ import com.marclw.lolstats.features.FeatureSpec;
 import com.marclw.lolstats.model.FeatureVector;
 import org.junit.jupiter.api.Test;
 import smile.classification.AbstractClassifier;
-import smile.classification.SoftClassifier;
+import smile.classification.Classifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,14 @@ class ModelEvaluatorTest {
 
     /**
      * A fake classifier that says "blue wins iff gold diff is positive".
-     * A named class rather than an anonymous one because Java doesn't allow
-     * an anonymous class to both extend AbstractClassifier and implement
-     * SoftClassifier at once - only one supertype is allowed for `new X() {}`.
-     * Using a stub rather than a trained model keeps these tests about the
+     * A named class so the constructor can pass the class labels up to
+     * AbstractClassifier's constructor cleanly - AbstractClassifier already
+     * implements Classifier<T> (and its classes()/numClasses() methods),
+     * so this only needs to override the two predict() methods. Using a
+     * stub rather than a trained model keeps these tests about the
      * evaluator's arithmetic, not about whether Smile converged.
      */
-    private static class GoldSignClassifier extends AbstractClassifier<double[]>
-            implements SoftClassifier<double[]> {
+    private static class GoldSignClassifier extends AbstractClassifier<double[]> {
 
         private final int goldIndex;
 
@@ -59,7 +59,7 @@ class ModelEvaluatorTest {
         }
     }
 
-    private SoftClassifier<double[]> goldSignClassifier() {
+    private Classifier<double[]> goldSignClassifier() {
         int goldIndex = FeatureSpec.FEATURE_NAMES.indexOf("goldDiffAtMinute");
         return new GoldSignClassifier(goldIndex);
     }

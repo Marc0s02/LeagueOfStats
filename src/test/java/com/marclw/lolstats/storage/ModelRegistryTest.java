@@ -30,7 +30,7 @@ class ModelRegistryTest {
         return vector;
     }
 
-    private smile.classification.SoftClassifier<double[]> trainedModel() {
+    private smile.classification.Classifier<double[]> trainedModel() {
         List<FeatureVector> rows = new ArrayList<>();
         for (int i = 1; i <= 40; i++) {
             rows.add(row(i * 100.0, true));

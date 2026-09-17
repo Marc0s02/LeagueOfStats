@@ -4,7 +4,7 @@ import com.marclw.lolstats.features.FeatureSpec;
 import com.marclw.lolstats.model.FeatureVector;
 import com.marclw.lolstats.prediction.ModelScorer;
 import org.junit.jupiter.api.Test;
-import smile.classification.SoftClassifier;
+import smile.classification.Classifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +42,13 @@ class ModelTrainerTest {
 
     @Test
     void trainsAModelOnSeparableData() {
-        SoftClassifier<double[]> model = new ModelTrainer().trainLogisticRegression(separableTrainingSet());
+        Classifier<double[]> model = new ModelTrainer().trainLogisticRegression(separableTrainingSet());
         assertNotNull(model);
     }
 
     @Test
     void learnedModelPredictsTheObviousRelationship() {
-        SoftClassifier<double[]> model = new ModelTrainer().trainLogisticRegression(separableTrainingSet());
+        Classifier<double[]> model = new ModelTrainer().trainLogisticRegression(separableTrainingSet());
 
         double blueAheadProbability = ModelScorer.blueWinProbability(model, row(5000, true));
         double blueBehindProbability = ModelScorer.blueWinProbability(model, row(-5000, false));
@@ -61,7 +61,7 @@ class ModelTrainerTest {
 
     @Test
     void probabilitiesAreInValidRange() {
-        SoftClassifier<double[]> model = new ModelTrainer().trainLogisticRegression(separableTrainingSet());
+        Classifier<double[]> model = new ModelTrainer().trainLogisticRegression(separableTrainingSet());
         double probability = ModelScorer.blueWinProbability(model, row(1234, true));
         assertTrue(probability >= 0.0 && probability <= 1.0,
                 "probability out of [0,1]: " + probability);
