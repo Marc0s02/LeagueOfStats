@@ -4,7 +4,7 @@ import com.marclw.lolstats.features.FeatureSpec;
 import com.marclw.lolstats.model.FeatureVector;
 import org.junit.jupiter.api.Test;
 import smile.classification.AbstractClassifier;
-import smile.classification.Classifier;
+import smile.classification.SoftClassifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,33 +29,39 @@ class ModelEvaluatorTest {
 
     /**
      * A fake classifier that says "blue wins iff gold diff is positive".
+     * A named class rather than an anonymous one because Java doesn't allow
+     * an anonymous class to both extend AbstractClassifier and implement
+     * SoftClassifier at once - only one supertype is allowed for `new X() {}`.
      * Using a stub rather than a trained model keeps these tests about the
      * evaluator's arithmetic, not about whether Smile converged.
      */
-    private Classifier<double[]> goldSignClassifier() {
+    private static class GoldSignClassifier extends AbstractClassifier<double[]>
+            implements SoftClassifier<double[]> {
+
+        private final int goldIndex;
+
+        GoldSignClassifier(int goldIndex) {
+            super(new int[]{0, 1});
+            this.goldIndex = goldIndex;
+        }
+
+        @Override
+        public int predict(double[] x) {
+            return x[goldIndex] > 0 ? 1 : 0;
+        }
+
+        @Override
+        public int predict(double[] x, double[] posteriori) {
+            double blue = x[goldIndex] > 0 ? 0.9 : 0.1;
+            posteriori[0] = 1 - blue;
+            posteriori[1] = blue;
+            return x[goldIndex] > 0 ? 1 : 0;
+        }
+    }
+
+    private SoftClassifier<double[]> goldSignClassifier() {
         int goldIndex = FeatureSpec.FEATURE_NAMES.indexOf("goldDiffAtMinute");
-        // Extends AbstractClassifier (not Classifier directly) so classes()
-        // comes from the int[] {0, 1} passed to the constructor, matching
-        // how every real Smile classifier here is built.
-        return new AbstractClassifier<double[]>(new int[]{0, 1}) {
-            @Override
-            public int predict(double[] x) {
-                return x[goldIndex] > 0 ? 1 : 0;
-            }
-
-            @Override
-            public int predict(double[] x, double[] posteriori) {
-                double blue = x[goldIndex] > 0 ? 0.9 : 0.1;
-                posteriori[0] = 1 - blue;
-                posteriori[1] = blue;
-                return x[goldIndex] > 0 ? 1 : 0;
-            }
-
-            @Override
-            public boolean isSoft() {
-                return true;
-            }
-        };
+        return new GoldSignClassifier(goldIndex);
     }
 
     @Test
