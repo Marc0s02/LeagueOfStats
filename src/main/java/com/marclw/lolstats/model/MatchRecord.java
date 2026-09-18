@@ -38,7 +38,35 @@ public class MatchRecord {
         private int totalDamageDealtToChampions;
         private int visionScore;
 
+
+        // item0-item6 from Match-V5, with empty slots (id 0) filtered out.
+        // item6 is the trinket slot - callers building "core build" stats
+        // should usually exclude it rather than treating it as a 7th item.
+        private List<Integer> finalItemIds;
+
+        // TOP/JUNGLE/MIDDLE/BOTTOM/UTILITY - Riot's Match-V5 field for lane
+        // assignment. Can be an empty string for non-standard game modes
+        // (Arena, etc.) where lanes don't apply - callers should treat ""
+        // the same as unknown, not as a fifth real lane.
+        private String teamPosition;
+
         public PlayerStats() {
+        }
+
+        public List<Integer> getFinalItemIds() {
+            return finalItemIds;
+        }
+
+        public void setFinalItemIds(List<Integer> finalItemIds) {
+            this.finalItemIds = finalItemIds;
+        }
+
+        public String getTeamPosition() {
+            return teamPosition;
+        }
+
+        public void setTeamPosition(String teamPosition) {
+            this.teamPosition = teamPosition;
         }
 
         public int getChampionId() {

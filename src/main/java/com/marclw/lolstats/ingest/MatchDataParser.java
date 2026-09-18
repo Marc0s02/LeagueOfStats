@@ -50,6 +50,7 @@ public class MatchDataParser {
             stats.setGoldEarned(p.get("goldEarned").getAsInt());
             stats.setTotalDamageDealtToChampions(p.get("totalDamageDealtToChampions").getAsInt());
             stats.setVisionScore(p.get("visionScore").getAsInt());
+            stats.setFinalItemIds(parseFinalItemIds(p));
 
             if (p.get("teamId").getAsInt() == 100) {
                 bluePlayers.add(stats);
@@ -165,6 +166,26 @@ public class MatchDataParser {
 
         timeline.setFrames(frames);
         return timeline;
+    }
+
+    /**
+     * Match-V5 participants carry item0..item6 as separate top-level int
+     * fields (item6 is always the trinket slot). Empty slots come back as
+     * id 0, not absent - filtered out here so callers don't have to check
+     * for 0 themselves.
+     */
+    private List<Integer> parseFinalItemIds(JsonObject participant) {
+        List<Integer> items = new ArrayList<>();
+        for (int slot = 0; slot <= 6; slot++) {
+            String field = "item" + slot;
+            if (participant.has(field)) {
+                int itemId = participant.get(field).getAsInt();
+                if (itemId != 0) {
+                    items.add(itemId);
+                }
+            }
+        }
+        return items;
     }
 
     private Map<Integer, Boolean> buildParticipantTeamMap(String matchJson) {
