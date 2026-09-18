@@ -70,12 +70,25 @@ public class ViewManager {
             controller.setViewManager(this);
             controller.populateData();
 
-            primaryStage.setScene(new Scene(root));
-            primaryStage.setTitle("LeagueOfStats - Champion Comparison");
+            primaryStage.setScene(createScene(root));
+            primaryStage.setTitle("LeagueOfStats - Summoner's Rift Analyzer");
+            primaryStage.setMinWidth(1180);
+            primaryStage.setMinHeight(820);
+            primaryStage.setWidth(Math.max(primaryStage.getWidth(), 1380));
+            primaryStage.setHeight(Math.max(primaryStage.getHeight(), 900));
         } catch (IOException | RuntimeException e) {
             // TODO: replace with real error handling/logging
             e.printStackTrace();
         }
+    }
+
+    private Scene createScene(Parent root) {
+        Scene scene = new Scene(root);
+        var stylesheet = getClass().getResource("/com/marclw/lolstats/styles.css");
+        if (stylesheet != null) {
+            scene.getStylesheets().add(stylesheet.toExternalForm());
+        }
+        return scene;
     }
 
     public void showPredictionView() {
@@ -88,7 +101,7 @@ public class ViewManager {
             controller.setPredictionService(predictionService);
             controller.setViewManager(this);
 
-            primaryStage.setScene(new Scene(root));
+            primaryStage.setScene(createScene(root));
             primaryStage.setTitle("LeagueOfStats - Match Prediction");
         } catch (IOException | RuntimeException e) {
             // TODO: replace with real error handling/logging
@@ -110,7 +123,7 @@ public class ViewManager {
             controller.setViewManager(this);
             controller.populateData();
 
-            primaryStage.setScene(new Scene(root));
+            primaryStage.setScene(createScene(root));
             primaryStage.setTitle("LeagueOfStats - Build & Rune Advisor");
         } catch (IOException | RuntimeException e) {
             // TODO: replace with real error handling/logging

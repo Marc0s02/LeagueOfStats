@@ -4,7 +4,11 @@ import com.marclw.lolstats.model.Champion;
 import com.marclw.lolstats.model.Role;
 
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class ChampionRepository {
 
@@ -18,22 +22,14 @@ public class ChampionRepository {
         this.cacheManager = cacheManager;
     }
 
-    /**
-     * Ensures the cache is fresh (fetching if needed), loads it, and caches
-     * the result in-memory for the rest of this call - findByName()/
-     * filterByRole() work against that in-memory list rather than re-reading
-     * from disk each time.
-     */
     public List<Champion> loadAll() {
         cacheManager.checkForUpdates();
-        champions = cacheManager.loadCachedChampions();
+        champions = deduplicate(cacheManager.loadCachedChampions());
         return champions;
     }
 
     public Champion findByName(String name) {
-        if (champions == null) {
-            loadAll();
-        }
+        if (champions == null) loadAll();
         return champions.stream()
                 .filter(c -> c.getName().equalsIgnoreCase(name))
                 .findFirst()
@@ -41,9 +37,7 @@ public class ChampionRepository {
     }
 
     public List<Champion> filterByRole(Role role) {
-        if (champions == null) {
-            loadAll();
-        }
+        if (champions == null) loadAll();
         return champions.stream()
                 .filter(c -> c.getRoles() != null && c.getRoles().contains(role))
                 .toList();
@@ -54,14 +48,25 @@ public class ChampionRepository {
     }
 
     public void setChampions(List<Champion> champions) {
-        this.champions = champions;
+        this.champions = deduplicate(champions);
     }
 
-    public CacheManager getCacheManager() {
-        return cacheManager;
+    private List<Champion> deduplicate(List<Champion> source) {
+        if (source == null) return List.of();
+        Map<Integer, Champion> unique = new LinkedHashMap<>();
+        java.util.Set<String> names = new java.util.HashSet<>();
+        for (Champion champion : source) {
+            if (champion == null || champion.getId() <= 0) continue;
+            String name = champion.getName() == null ? "" : champion.getName().trim().toLowerCase(Locale.ROOT);
+            if (!unique.containsKey(champion.getId()) && (name.isEmpty() || names.add(name))) {
+                unique.put(champion.getId(), champion);
+            }
+        }
+        return unique.values().stream()
+                .sorted(Comparator.comparing(Champion::getName, String.CASE_INSENSITIVE_ORDER))
+                .toList();
     }
 
-    public void setCacheManager(CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
-    }
+    public CacheManager getCacheManager() { return cacheManager; }
+    public void setCacheManager(CacheManager cacheManager) { this.cacheManager = cacheManager; }
 }

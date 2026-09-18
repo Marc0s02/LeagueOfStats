@@ -14,6 +14,10 @@ public class Item {
     private Map<String, Boolean> maps;
     private String requiredAlly;
     private String requiredChampion;
+    private boolean purchasable = true;
+    private boolean displayInItemSets = true;
+    private boolean hiddenFromAll;
+    private String iconUrl;
 
     public Item() {
     }
@@ -72,6 +76,42 @@ public class Item {
 
     public void setRequiredAlly(String requiredAlly) {
         this.requiredAlly = requiredAlly;
+    }
+
+    public boolean isPurchasable() {
+        return purchasable;
+    }
+
+    public void setPurchasable(boolean purchasable) {
+        this.purchasable = purchasable;
+    }
+
+    public boolean isDisplayInItemSets() {
+        return displayInItemSets;
+    }
+
+    public void setDisplayInItemSets(boolean displayInItemSets) {
+        this.displayInItemSets = displayInItemSets;
+    }
+
+    public boolean isHiddenFromAll() {
+        return hiddenFromAll;
+    }
+
+    public void setHiddenFromAll(boolean hiddenFromAll) {
+        this.hiddenFromAll = hiddenFromAll;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public boolean isAvailableOnMap(String mapId) {
+        return maps != null && Boolean.TRUE.equals(maps.get(mapId));
     }
 
     public String getRequiredChampion() {

@@ -2,73 +2,132 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.image.ImageView?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.marclw.lolstats.ui.calculator.MainController">
+<BorderPane fx:id="root" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.marclw.lolstats.ui.calculator.MainController"
+            styleClass="app-root">
+
     <top>
-        <Label text="Champion Comparison" style="-fx-font-size: 18px; -fx-font-weight: bold;">
-            <BorderPane.margin>
-                <Insets top="10" right="10" bottom="0" left="10" />
-            </BorderPane.margin>
-        </Label>
+        <VBox styleClass="top-bar">
+            <padding>
+                <Insets top="16" right="22" bottom="14" left="22"/>
+            </padding>
+            <HBox alignment="CENTER_LEFT" spacing="14">
+                <Label text="LEAGUEOFSTATS" styleClass="brand-label"/>
+                <Label text="CHAMPION ANALYZER" styleClass="brand-subtitle"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="SUMMONER'S RIFT" styleClass="mode-pill"/>
+            </HBox>
+            <HBox spacing="8" styleClass="navigation-row">
+                <Button text="Calculator" styleClass="nav-button-active"/>
+                <Button text="Match Prediction" onAction="#onSwitchToPrediction" styleClass="nav-button"/>
+                <Button text="Build Advisor" onAction="#onSwitchToAdvisor" styleClass="nav-button"/>
+            </HBox>
+        </VBox>
     </top>
+
     <center>
-        <HBox spacing="20">
-            <padding>
-                <Insets top="15" right="15" bottom="15" left="15" />
-            </padding>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="main-scroll">
+            <VBox spacing="18">
+                <padding>
+                    <Insets top="20" right="22" bottom="20" left="22"/>
+                </padding>
 
-            <VBox spacing="8" HBox.hgrow="ALWAYS">
-                <Label text="Champion A" style="-fx-font-weight: bold;" />
-                <ComboBox fx:id="championABox" maxWidth="Infinity" />
-                <Label text="Level" />
-                <Spinner fx:id="levelASpinner" editable="true" />
-                <Label text="Items (ctrl/cmd-click to select multiple)" />
-                <ListView fx:id="itemsAListView" prefHeight="150" />
-                <Label text="Final Stats:" style="-fx-font-weight: bold;">
-                    <VBox.margin>
-                        <Insets top="10" />
-                    </VBox.margin>
-                </Label>
-                <Label fx:id="statsALabel" wrapText="true" />
-            </VBox>
+                <HBox spacing="16">
+                    <VBox styleClass="team-panel" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="RED TEAM" styleClass="team-title-red"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="5 PLAYER SLOTS" styleClass="team-counter"/>
+                        </HBox>
+                        <FlowPane fx:id="redTeamSlots" hgap="10" vgap="10" prefWrapLength="650"/>
+                    </VBox>
 
-            <VBox spacing="8" HBox.hgrow="ALWAYS">
-                <Label text="Champion B" style="-fx-font-weight: bold;" />
-                <ComboBox fx:id="championBBox" maxWidth="Infinity" />
-                <Label text="Level" />
-                <Spinner fx:id="levelBSpinner" editable="true" />
-                <Label text="Items (ctrl/cmd-click to select multiple)" />
-                <ListView fx:id="itemsBListView" prefHeight="150" />
-                <Label text="Final Stats:" style="-fx-font-weight: bold;">
-                    <VBox.margin>
-                        <Insets top="10" />
-                    </VBox.margin>
-                </Label>
-                <Label fx:id="statsBLabel" wrapText="true" />
+                    <VBox styleClass="team-panel" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="BLUE TEAM" styleClass="team-title-blue"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="5 PLAYER SLOTS" styleClass="team-counter"/>
+                        </HBox>
+                        <FlowPane fx:id="blueTeamSlots" hgap="10" vgap="10" prefWrapLength="650"/>
+                    </VBox>
+                </HBox>
+
+                <VBox styleClass="selector-panel" spacing="12">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <VBox spacing="2">
+                            <Label text="CHAMPION SELECTOR" styleClass="section-title"/>
+                            <Label fx:id="activeTeamLabel" text="Adding champions to Red Team" styleClass="section-subtitle"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="redTeamButton" text="Red Team" onAction="#onSelectRedTeam" styleClass="team-toggle-red"/>
+                        <Button fx:id="blueTeamButton" text="Blue Team" onAction="#onSelectBlueTeam" styleClass="team-toggle-blue"/>
+                    </HBox>
+                    <TextField fx:id="championSearchField" promptText="Search champion..." styleClass="search-field"/>
+                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefViewportHeight="250" styleClass="selector-scroll">
+                        <FlowPane fx:id="championGrid" hgap="9" vgap="9" prefWrapLength="1050"/>
+                    </ScrollPane>
+                </VBox>
+
+                <HBox spacing="16">
+                    <VBox styleClass="detail-panel" prefWidth="350">
+                        <Label text="SELECTED CHAMPION" styleClass="section-title"/>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <StackPane styleClass="selected-champion-image-frame">
+                                <ImageView fx:id="selectedChampionImage" fitWidth="88" fitHeight="88" preserveRatio="true"/>
+                            </StackPane>
+                            <VBox spacing="4">
+                                <Label fx:id="selectedChampionNameLabel" text="No champion selected" styleClass="selected-champion-name"/>
+                                <Label fx:id="selectedChampionMetaLabel" text="Click a team champion or add one from the selector." wrapText="true" styleClass="selected-champion-meta"/>
+                            </VBox>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="LEVEL" styleClass="small-label"/>
+                            <Spinner fx:id="selectedLevelSpinner" prefWidth="100"/>
+                        </HBox>
+                        <Label text="FINAL STATS" styleClass="small-label"/>
+                        <Label fx:id="selectedStatsLabel" text="—" styleClass="stats-label"/>
+                    </VBox>
+
+                    <VBox styleClass="detail-panel" HBox.hgrow="ALWAYS" spacing="12">
+                        <HBox alignment="CENTER_LEFT">
+                            <VBox spacing="2">
+                                <Label text="BUILD" styleClass="section-title"/>
+                                <Label fx:id="buildSummaryLabel" text="0 / 6 items" styleClass="section-subtitle"/>
+                            </VBox>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="Clear Build" onAction="#onClearSelectedBuild" styleClass="secondary-button"/>
+                        </HBox>
+                        <FlowPane fx:id="buildSlots" hgap="8" vgap="8"/>
+                        <TextField fx:id="itemSearchField" promptText="Search Summoner's Rift items..." styleClass="search-field"/>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefViewportHeight="205" styleClass="selector-scroll">
+                            <FlowPane fx:id="itemGrid" hgap="8" vgap="8" prefWrapLength="680"/>
+                        </ScrollPane>
+                    </VBox>
+                </HBox>
             </VBox>
-        </HBox>
+        </ScrollPane>
     </center>
+
     <bottom>
-        <HBox spacing="10" alignment="CENTER">
+        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="status-bar">
             <padding>
-                <Insets top="10" right="10" bottom="10" left="10" />
+                <Insets top="12" right="22" bottom="14" left="22"/>
             </padding>
-            <Button text="Compare" onAction="#onCompare" />
-            <!-- Hands off to ViewManager.showPredictionView() -->
-            <Button fx:id="switchToPredictionButton" text="Switch to Match Prediction"
-                    onAction="#onSwitchToPrediction" />
-            <!-- Hands off to ViewManager.showAdvisorView() -->
-            <Button fx:id="switchToAdvisorButton" text="Open Advisor"
-                    onAction="#onSwitchToAdvisor" />
+            <Label fx:id="statusLabel" text="Ready" styleClass="status-label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Analyze Teams" onAction="#onCompare" styleClass="primary-button"/>
         </HBox>
     </bottom>
 </BorderPane>

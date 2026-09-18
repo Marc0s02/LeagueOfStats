@@ -1,1 +1,348 @@
-/* JavaFX styling for the main screen - TODO */
+.root {
+    -fx-font-family: "Segoe UI", "Inter", Arial, sans-serif;
+    -fx-font-size: 13px;
+}
+
+.app-root {
+    -fx-background-color: #0b0f16;
+}
+
+.top-bar {
+    -fx-background-color: #111722;
+    -fx-border-color: #202938;
+    -fx-border-width: 0 0 1 0;
+}
+
+.brand-label {
+    -fx-text-fill: #f3f5f8;
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+    -fx-letter-spacing: 1.2px;
+}
+
+.brand-subtitle {
+    -fx-text-fill: #7e8ba1;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+}
+
+.mode-pill {
+    -fx-background-color: #1a2230;
+    -fx-background-radius: 14;
+    -fx-border-color: #303c50;
+    -fx-border-radius: 14;
+    -fx-padding: 7 12 7 12;
+    -fx-text-fill: #aebbd0;
+    -fx-font-size: 10px;
+    -fx-font-weight: 800;
+}
+
+.navigation-row {
+    -fx-padding: 12 0 0 0;
+}
+
+.nav-button, .nav-button-active {
+    -fx-background-radius: 7;
+    -fx-padding: 8 13 8 13;
+    -fx-font-weight: 700;
+    -fx-cursor: hand;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #8996aa;
+}
+
+.nav-button:hover {
+    -fx-background-color: #1a2230;
+    -fx-text-fill: #e7ebf2;
+}
+
+.nav-button-active {
+    -fx-background-color: #263149;
+    -fx-text-fill: #e9eef7;
+}
+
+.main-scroll, .selector-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+.main-scroll > .viewport, .selector-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.team-panel, .selector-panel, .detail-panel {
+    -fx-background-color: #111722;
+    -fx-background-radius: 10;
+    -fx-border-color: #222d3d;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 15;
+}
+
+.team-panel {
+    -fx-min-height: 205px;
+}
+
+.team-title-red, .team-title-blue {
+    -fx-font-size: 12px;
+    -fx-font-weight: 900;
+}
+
+.team-title-red { -fx-text-fill: #e47a83; }
+.team-title-blue { -fx-text-fill: #6ea8ed; }
+
+.team-counter {
+    -fx-text-fill: #66748a;
+    -fx-font-size: 9px;
+    -fx-font-weight: 800;
+}
+
+.section-title {
+    -fx-text-fill: #eef2f7;
+    -fx-font-size: 12px;
+    -fx-font-weight: 900;
+}
+
+.section-subtitle, .selected-champion-meta {
+    -fx-text-fill: #77859a;
+    -fx-font-size: 11px;
+}
+
+.search-field {
+    -fx-background-color: #0c111a;
+    -fx-background-radius: 7;
+    -fx-border-color: #2a3547;
+    -fx-border-radius: 7;
+    -fx-text-fill: #e9edf4;
+    -fx-prompt-text-fill: #59667a;
+    -fx-padding: 9 12 9 12;
+}
+
+.search-field:focused {
+    -fx-border-color: #536b98;
+}
+
+.champion-picker-card, .item-card {
+    -fx-background-color: #151c28;
+    -fx-border-color: #273346;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-padding: 6;
+    -fx-cursor: hand;
+}
+
+.champion-picker-card:hover, .item-card:hover {
+    -fx-background-color: #1b2535;
+    -fx-border-color: #536b98;
+}
+
+.champion-picker-selected {
+    -fx-opacity: 0.38;
+}
+
+.champion-picker-name, .item-card-name {
+    -fx-text-fill: #b7c2d2;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.team-champion-card {
+    -fx-background-color: #151c28;
+    -fx-border-color: #293548;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+}
+
+.team-champion-card-active {
+    -fx-border-color: #d8b35d;
+    -fx-effect: dropshadow(gaussian, rgba(216,179,93,0.22), 10, 0.2, 0, 0);
+}
+
+.team-champion-image-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.team-champion-name {
+    -fx-text-fill: #e1e6ee;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.remove-champion-button {
+    -fx-background-color: #222b39;
+    -fx-background-radius: 10;
+    -fx-text-fill: #8f9bad;
+    -fx-font-size: 13px;
+    -fx-padding: 1 6 2 6;
+    -fx-cursor: hand;
+}
+
+.remove-champion-button:hover {
+    -fx-background-color: #4a2930;
+    -fx-text-fill: #ef9aa2;
+}
+
+.team-empty-slot {
+    -fx-background-color: #0d131d;
+    -fx-border-color: #273244;
+    -fx-border-style: dashed;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.empty-slot-plus {
+    -fx-text-fill: #4b5a70;
+    -fx-font-size: 24px;
+    -fx-font-weight: 300;
+}
+
+.empty-slot-text {
+    -fx-text-fill: #4f5d70;
+    -fx-font-size: 9px;
+}
+
+.team-toggle-red, .team-toggle-blue {
+    -fx-background-radius: 7;
+    -fx-padding: 8 12 8 12;
+    -fx-font-weight: 800;
+    -fx-cursor: hand;
+}
+
+.team-toggle-red {
+    -fx-background-color: #3a2028;
+    -fx-text-fill: #df8c96;
+    -fx-border-color: #63313b;
+    -fx-border-radius: 7;
+}
+
+.team-toggle-blue {
+    -fx-background-color: #1e2e43;
+    -fx-text-fill: #83afe7;
+    -fx-border-color: #304c70;
+    -fx-border-radius: 7;
+}
+
+.team-toggle-active {
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.10), 9, 0.2, 0, 0);
+}
+
+.selected-champion-image-frame {
+    -fx-background-color: #0b1018;
+    -fx-border-color: #303c50;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 5;
+}
+
+.selected-champion-name {
+    -fx-text-fill: #f1f4f8;
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+}
+
+.small-label {
+    -fx-text-fill: #66748a;
+    -fx-font-size: 9px;
+    -fx-font-weight: 900;
+}
+
+.stats-label {
+    -fx-background-color: #0c1119;
+    -fx-background-radius: 7;
+    -fx-text-fill: #b7c2d2;
+    -fx-font-family: "Consolas", monospace;
+    -fx-font-size: 11px;
+    -fx-padding: 11px;
+}
+
+.build-slot {
+    -fx-background-color: #0b1018;
+    -fx-border-color: #2a3547;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-pref-width: 58px;
+    -fx-pref-height: 58px;
+}
+
+.build-slot:hover {
+    -fx-border-color: #8e6e38;
+    -fx-cursor: hand;
+}
+
+.build-slot-plus {
+    -fx-text-fill: #46546a;
+    -fx-font-size: 20px;
+}
+
+.build-slot-index {
+    -fx-background-color: #202938;
+    -fx-background-radius: 0 0 4px 0;
+    -fx-text-fill: #8490a2;
+    -fx-font-size: 8px;
+    -fx-padding: 2 4 2 3;
+}
+
+.item-card-selected {
+    -fx-border-color: #d0a64d;
+    -fx-background-color: #2a2418;
+}
+
+.secondary-button {
+    -fx-background-color: #1b2330;
+    -fx-border-color: #303c50;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-text-fill: #aeb9c9;
+    -fx-padding: 7 10 7 10;
+    -fx-cursor: hand;
+}
+
+.primary-button {
+    -fx-background-color: #b28b3f;
+    -fx-background-radius: 7;
+    -fx-text-fill: #10131a;
+    -fx-font-weight: 900;
+    -fx-padding: 9 16 9 16;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: #c49d4d;
+}
+
+.status-bar {
+    -fx-background-color: #0f141d;
+    -fx-border-color: #202938;
+    -fx-border-width: 1 0 0 0;
+}
+
+.status-label {
+    -fx-text-fill: #748197;
+    -fx-font-size: 10px;
+}
+
+.spinner {
+    -fx-background-color: #0c1119;
+}
+
+.spinner .text-field {
+    -fx-background-color: #0c1119;
+    -fx-text-fill: #dce2eb;
+}
+
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: #0c1119;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #2c384b;
+    -fx-background-radius: 5px;
+}

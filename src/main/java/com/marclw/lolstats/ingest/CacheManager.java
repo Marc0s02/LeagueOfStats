@@ -52,12 +52,12 @@ public class CacheManager {
      * any later fix, since isCacheStale() otherwise only compares patch
      * strings.
      *
-     * v3: reintroduced a per-champion CDragon fetch (fetchChampionDetail)
+     * v5: adds UI icon URLs and item-selection fields (purchasable/displayInItemSets) (fetchChampionDetail)
      * to read tacticalInfo.damageType, and added rune caching - a cache
      * written under v2 has champions with no real damageType and no
      * runes.json.gz at all, so this bump is required, not optional.
      */
-    private static final int CACHE_FORMAT_VERSION = 3;
+    private static final int CACHE_FORMAT_VERSION = 5;
 
     private final Gson gson = new Gson();
     private final ChampionDetailParser championDetailParser = new ChampionDetailParser();
@@ -201,6 +201,7 @@ public class CacheManager {
             }
 
             Champion champion = new Champion(id, name, roles, baseStats, perLevelGrowth);
+            champion.setIconUrl(client.getBaseUrl() + "champion-icons/" + id + ".png");
 
             // damageType isn't in Data Dragon at all - only CDragon's
             // champions/{id}.json has tacticalInfo.damageType, so this is
@@ -276,6 +277,9 @@ public class CacheManager {
             if (entry.has("gold") && entry.getAsJsonObject("gold").has("total")) {
                 item.setCost(entry.getAsJsonObject("gold").get("total").getAsInt());
             }
+            if (entry.has("gold") && entry.getAsJsonObject("gold").has("purchasable")) {
+                item.setPurchasable(entry.getAsJsonObject("gold").get("purchasable").getAsBoolean());
+            }
 
             JsonObject statsJson = entry.has("stats") && entry.get("stats").isJsonObject()
                     ? entry.getAsJsonObject("stats") : new JsonObject();
@@ -295,6 +299,9 @@ public class CacheManager {
             item.setInStore(!entry.has("inStore") || entry.get("inStore").getAsBoolean());
             item.setRequiredChampion(entry.has("requiredChampion") ? entry.get("requiredChampion").getAsString() : "");
             item.setRequiredAlly(entry.has("requiredAlly") ? entry.get("requiredAlly").getAsString() : "");
+            item.setDisplayInItemSets(!entry.has("displayInItemSets") || entry.get("displayInItemSets").getAsBoolean());
+            item.setHiddenFromAll(entry.has("hideFromAll") && entry.get("hideFromAll").getAsBoolean());
+            item.setIconUrl("https://ddragon.leagueoflegends.com/cdn/" + version + "/img/item/" + item.getId() + ".png");
 
             items.add(item);
         }

@@ -10,6 +10,15 @@ public class Champion {
     private Stats baseStats;
     private Stats perLevelGrowth;
     private DamageType damageType = DamageType.UNKNOWN;
+    private String iconUrl;
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
 
     public DamageType getDamageType() {
         return damageType;
