@@ -8,13 +8,16 @@ com\marclw\lolstats\service\StatCalculator.class
 com\marclw\lolstats\Smoke.class
 com\marclw\lolstats\features\FeatureExtractor.class
 com\marclw\lolstats\ingest\CacheManager.class
+com\marclw\lolstats\ingest\RuneRepository.class
 com\marclw\lolstats\recommendation\GameState$Source.class
 com\marclw\lolstats\model\MatchRecord$PlayerStats.class
+com\marclw\lolstats\ingest\CacheManager$4.class
 com\marclw\lolstats\stats\MatchupStatsStore$1.class
 com\marclw\lolstats\ui\prediction\PredictionController$1.class
 com\marclw\lolstats\recommendation\RecommendationSettings.class
 com\marclw\lolstats\model\FeatureVector.class
 com\marclw\lolstats\recommendation\HeuristicBuildRecommender.class
+com\marclw\lolstats\model\DamageType.class
 com\marclw\lolstats\recommendation\RecommendedBuild.class
 com\marclw\lolstats\ingest\CacheManager$1.class
 com\marclw\lolstats\recommendation\MatchupStatsProvider.class
