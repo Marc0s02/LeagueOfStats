@@ -61,11 +61,11 @@ public class MatchupStatsBuilder {
      * matchup tally rather than being paired arbitrarily.
      */
     private void tallyLaneMatchups(List<MatchRecord.PlayerStats> side,
-                                    List<MatchRecord.PlayerStats> opposingSide,
-                                    boolean sideWon,
-                                    String patchVersion,
-                                    Map<String, int[]> tally,
-                                    Map<String, String> patchByKey) {
+                                   List<MatchRecord.PlayerStats> opposingSide,
+                                   boolean sideWon,
+                                   String patchVersion,
+                                   Map<String, int[]> tally,
+                                   Map<String, String> patchByKey) {
         if (side == null || opposingSide == null) {
             return;
         }
@@ -98,6 +98,78 @@ public class MatchupStatsBuilder {
     }
 
     /**
+     * Same lane-pairing rule as buildMatchupStats, but tallying per
+     * (championId, opposingChampionId, itemId) triple rather than just
+     * (championId, opposingChampionId) - this is what feeds
+     * MatchupStatsStore.mostPopularItemIdsForMatchup so it can be
+     * genuinely matchup-specific instead of falling back to a champion's
+     * overall build stats regardless of opponent.
+     */
+    public List<ChampionItemMatchupRecord> buildItemMatchupStats(List<MatchRecord> matches) {
+        // Keyed by "championId:opposingChampionId:itemId" -> [gamesPlayed, wins]
+        Map<String, int[]> tally = new HashMap<>();
+        Map<String, String> patchByKey = new HashMap<>();
+
+        for (MatchRecord match : matches) {
+            boolean blueWon = "BLUE".equals(match.getWinningTeam());
+            tallyItemMatchupsForSide(match.getBluePlayers(), match.getRedPlayers(), blueWon,
+                    match.getGameVersion(), tally, patchByKey);
+            tallyItemMatchupsForSide(match.getRedPlayers(), match.getBluePlayers(), !blueWon,
+                    match.getGameVersion(), tally, patchByKey);
+        }
+
+        List<ChampionItemMatchupRecord> records = new ArrayList<>();
+        for (Map.Entry<String, int[]> entry : tally.entrySet()) {
+            String[] parts = entry.getKey().split(":");
+            int championId = Integer.parseInt(parts[0]);
+            int opposingChampionId = Integer.parseInt(parts[1]);
+            int itemId = Integer.parseInt(parts[2]);
+            int[] gamesAndWins = entry.getValue();
+            records.add(new ChampionItemMatchupRecord(
+                    championId, opposingChampionId, itemId, gamesAndWins[0], gamesAndWins[1],
+                    patchByKey.get(entry.getKey())));
+        }
+        return records;
+    }
+
+    /**
+     * Pairs lane opponents exactly like tallyLaneMatchups (same
+     * teamPosition rule, same skip-on-missing-position/opponent
+     * behaviour), then additionally tallies each of the player's
+     * finalItemIds against that specific opponent rather than just the
+     * outcome.
+     */
+    private void tallyItemMatchupsForSide(List<MatchRecord.PlayerStats> side,
+                                          List<MatchRecord.PlayerStats> opposingSide,
+                                          boolean sideWon,
+                                          String patchVersion,
+                                          Map<String, int[]> tally,
+                                          Map<String, String> patchByKey) {
+        if (side == null || opposingSide == null) {
+            return;
+        }
+        for (MatchRecord.PlayerStats player : side) {
+            String position = player.getTeamPosition();
+            if (position == null || position.isBlank()) {
+                continue;
+            }
+            MatchRecord.PlayerStats laneOpponent = findByPosition(opposingSide, position);
+            if (laneOpponent == null || player.getFinalItemIds() == null) {
+                continue;
+            }
+            for (int itemId : player.getFinalItemIds()) {
+                String key = player.getChampionId() + ":" + laneOpponent.getChampionId() + ":" + itemId;
+                int[] gamesAndWins = tally.computeIfAbsent(key, k -> new int[2]);
+                gamesAndWins[0]++;
+                if (sideWon) {
+                    gamesAndWins[1]++;
+                }
+                patchByKey.put(key, patchVersion);
+            }
+        }
+    }
+
+    /**
      * Not matchup-specific - see ChampionItemStatsRecord javadoc for why.
      * A player contributes one tally entry per item in their final build
      * (item6/trinket included - filtering that out, if desired, is a
@@ -127,10 +199,10 @@ public class MatchupStatsBuilder {
     }
 
     private void tallyItemsForSide(List<MatchRecord.PlayerStats> side,
-                                    boolean sideWon,
-                                    String patchVersion,
-                                    Map<String, int[]> tally,
-                                    Map<String, String> patchByKey) {
+                                   boolean sideWon,
+                                   String patchVersion,
+                                   Map<String, int[]> tally,
+                                   Map<String, String> patchByKey) {
         if (side == null) {
             return;
         }
