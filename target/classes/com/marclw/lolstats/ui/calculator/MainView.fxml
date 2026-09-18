@@ -66,6 +66,9 @@
             <!-- Hands off to ViewManager.showPredictionView() -->
             <Button fx:id="switchToPredictionButton" text="Switch to Match Prediction"
                     onAction="#onSwitchToPrediction" />
+            <!-- Hands off to ViewManager.showAdvisorView() -->
+            <Button fx:id="switchToAdvisorButton" text="Open Advisor"
+                    onAction="#onSwitchToAdvisor" />
         </HBox>
     </bottom>
 </BorderPane>

@@ -56,6 +56,7 @@ D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\trai
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\training\ModelEvaluator.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\training\ModelTrainer.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\training\TrainingPipelineRunner.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ui\advisor\AdvisorController.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ui\calculator\MainController.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ui\prediction\PredictionController.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ui\ViewManager.java

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.marclw.lolstats.ui.advisor.AdvisorController"
+            prefWidth="900" prefHeight="620">
+    <top>
+        <VBox spacing="4">
+            <padding>
+                <Insets top="12" right="15" bottom="4" left="15" />
+            </padding>
+            <Label text="Build &amp; Rune Advisor" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Label text="Pick your champion and the two team comps, then get a suggested build and rune page."
+                   style="-fx-text-fill: #666666;" />
+        </VBox>
+    </top>
+
+    <center>
+        <HBox spacing="20">
+            <padding>
+                <Insets top="10" right="15" bottom="10" left="15" />
+            </padding>
+
+            <VBox spacing="8" prefWidth="220">
+                <Label text="My Champion" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="myChampionBox" maxWidth="Infinity" />
+
+                <Label text="Allies (ctrl/cmd-click to select multiple)">
+                    <VBox.margin>
+                        <Insets top="10" />
+                    </VBox.margin>
+                </Label>
+                <ListView fx:id="alliesListView" prefHeight="150" />
+
+                <Label text="Enemies (ctrl/cmd-click to select multiple)">
+                    <VBox.margin>
+                        <Insets top="10" />
+                    </VBox.margin>
+                </Label>
+                <ListView fx:id="enemiesListView" prefHeight="150" />
+
+                <CheckBox fx:id="useRealMatchDataCheckBox" text="Use real match data (if available)">
+                    <VBox.margin>
+                        <Insets top="10" />
+                    </VBox.margin>
+                </CheckBox>
+
+                <Button text="Get Recommendation" onAction="#onGetRecommendation" defaultButton="true">
+                    <VBox.margin>
+                        <Insets top="8" />
+                    </VBox.margin>
+                </Button>
+
+                <Label fx:id="statusLabel" wrapText="true" style="-fx-text-fill: #444444;">
+                    <VBox.margin>
+                        <Insets top="8" />
+                    </VBox.margin>
+                </Label>
+            </VBox>
+
+            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Recommended Build" style="-fx-font-weight: bold;" />
+                <Label fx:id="buildSummaryLabel" wrapText="true" />
+                <ListView fx:id="itemRecommendationsListView" prefHeight="180" />
+
+                <Label text="Recommended Runes" style="-fx-font-weight: bold;">
+                    <VBox.margin>
+                        <Insets top="12" />
+                    </VBox.margin>
+                </Label>
+                <Label fx:id="keystoneLabel" />
+                <ListView fx:id="playstyleNotesListView" prefHeight="150" VBox.vgrow="ALWAYS" />
+            </VBox>
+        </HBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER">
+            <padding>
+                <Insets top="8" right="15" bottom="12" left="15" />
+            </padding>
+            <Button text="Back to Stat Calculator" onAction="#onSwitchToCalculator" />
+            <Button text="Switch to Match Prediction" onAction="#onSwitchToPrediction" />
+        </HBox>
+    </bottom>
+</BorderPane>
