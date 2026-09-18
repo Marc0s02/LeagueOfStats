@@ -59,7 +59,7 @@ public class ViewManager {
 
             primaryStage.setScene(new Scene(root));
             primaryStage.setTitle("LeagueOfStats - Champion Comparison");
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             // TODO: replace with real error handling/logging
             e.printStackTrace();
         }
@@ -77,7 +77,7 @@ public class ViewManager {
 
             primaryStage.setScene(new Scene(root));
             primaryStage.setTitle("LeagueOfStats - Match Prediction");
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             // TODO: replace with real error handling/logging
             e.printStackTrace();
         }
