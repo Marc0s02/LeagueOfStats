@@ -36,6 +36,14 @@ public class DataDragonClient {
     }
 
     /**
+     * Returns runesReforged.json for the given patch version - a JSON array
+     * of the 5 rune trees, each with a "slots" array of rune options.
+     */
+    public String fetchRuneData(String version) {
+        return get("https://ddragon.leagueoflegends.com/cdn/" + version + "/data/en_US/runesReforged.json");
+    }
+
+    /**
      * Returns the full champion.json for the given patch version - an
      * object shaped like { "data": { "Aatrox": {...}, "Ahri": {...}, ... } },
      * each entry keyed by champion name (not numeric id) and containing a

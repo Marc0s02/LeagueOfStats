@@ -7,8 +7,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.marclw.lolstats.model.Champion;
+import com.marclw.lolstats.model.DamageType;
 import com.marclw.lolstats.model.Item;
 import com.marclw.lolstats.model.Role;
+import com.marclw.lolstats.model.Rune;
 import com.marclw.lolstats.model.Stats;
 
 import java.io.IOException;
@@ -25,19 +27,21 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * Handles local, gzip-compressed caching of champion/item data so repeat
- * launches don't need to hit the network. Stored outside the install
- * directory (e.g. under the user's home folder) so app size stays small.
+ * Handles local, gzip-compressed caching of champion/item/rune data so
+ * repeat launches don't need to hit the network. Stored outside the
+ * install directory (e.g. under the user's home folder) so app size
+ * stays small.
  *
- * Cache files store OUR OWN Champion/Item model objects (Gson-serialized),
- * not raw Community Dragon JSON - all the CDragon-schema parsing happens
- * once, in refreshCache(), so loadCachedChampions()/loadCachedItems() on
+ * Cache files store OUR OWN Champion/Item/Rune model objects
+ * (Gson-serialized), not raw Community Dragon/Data Dragon JSON - all the
+ * schema parsing happens once, in refreshCache(), so loadCachedX() on
  * every subsequent launch are simple and fast.
  */
 public class CacheManager {
 
     private static final Type CHAMPION_LIST_TYPE = new TypeToken<List<Champion>>() {}.getType();
     private static final Type ITEM_LIST_TYPE = new TypeToken<List<Item>>() {}.getType();
+    private static final Type RUNE_LIST_TYPE = new TypeToken<List<Rune>>() {}.getType();
 
     /**
      * Bump this whenever the CDragon/Data Dragon parsing logic changes
@@ -47,11 +51,17 @@ public class CacheManager {
      * buggy build of the parser would sit on disk forever, silently masking
      * any later fix, since isCacheStale() otherwise only compares patch
      * strings.
+     *
+     * v3: reintroduced a per-champion CDragon fetch (fetchChampionDetail)
+     * to read tacticalInfo.damageType, and added rune caching - a cache
+     * written under v2 has champions with no real damageType and no
+     * runes.json.gz at all, so this bump is required, not optional.
      */
-    private static final int CACHE_FORMAT_VERSION = 2;
+    private static final int CACHE_FORMAT_VERSION = 3;
 
     private final Gson gson = new Gson();
     private final ChampionDetailParser championDetailParser = new ChampionDetailParser();
+    private final DataDragonClient dataDragonClient = new DataDragonClient();
 
     private Path cacheDir;
     private Path metadataFile;
@@ -74,6 +84,10 @@ public class CacheManager {
 
     public List<Item> loadCachedItems() {
         return readGzipped(cacheDir.resolve("items.json.gz"), ITEM_LIST_TYPE);
+    }
+
+    public List<Rune> loadCachedRunes() {
+        return readGzipped(cacheDir.resolve("runes.json.gz"), RUNE_LIST_TYPE);
     }
 
     /**
@@ -101,17 +115,18 @@ public class CacheManager {
     }
 
     /**
-     * Fetches fresh data via CDragonClient, gzip-compresses it, writes it to
-     * cacheDir, and updates metadataFile with the new patch version.
+     * Fetches fresh data via CDragonClient/DataDragonClient, gzip-compresses
+     * it, writes it to cacheDir, and updates metadataFile with the new
+     * patch version.
      *
-     * Note on cost: champion-summary.json is one request, but base stats
-     * aren't in it - getting real stats for every champion means one
-     * additional request PER champion (championDetailParser needs
-     * champions/{id}.json). That's ~170 sequential HTTP calls on a cold
-     * cache, which is genuinely slow (tens of seconds). Fine for now since
-     * it only happens on a stale/missing cache, but worth parallelizing
-     * later (e.g. an ExecutorService with a handful of threads) if it
-     * becomes annoying during development.
+     * Note on cost: champion base stats come from one Data Dragon request,
+     * but damageType is CDragon-only (tacticalInfo.damageType isn't in
+     * Data Dragon's champion.json at all) - so getting it means one
+     * additional request PER champion via fetchChampionDetail(id). That's
+     * ~170 sequential HTTP calls on a cold cache, on top of everything
+     * else. Fine for now since it only happens on a stale/missing cache,
+     * but worth parallelizing (e.g. an ExecutorService with a handful of
+     * threads) if it becomes annoying during development.
      */
     public void refreshCache() {
         try {
@@ -119,9 +134,11 @@ public class CacheManager {
 
             List<Champion> champions = fetchAllChampions();
             List<Item> items = fetchAllItems();
+            List<Rune> runes = fetchAllRunes();
 
             writeGzipped(cacheDir.resolve("champions.json.gz"), gson.toJson(champions, CHAMPION_LIST_TYPE));
             writeGzipped(cacheDir.resolve("items.json.gz"), gson.toJson(items, ITEM_LIST_TYPE));
+            writeGzipped(cacheDir.resolve("runes.json.gz"), gson.toJson(runes, RUNE_LIST_TYPE));
 
             cachedPatchVersion = client.fetchLatestPatchVersion();
             cachedFormatVersion = CACHE_FORMAT_VERSION;
@@ -183,9 +200,51 @@ public class CacheManager {
                 perLevelGrowth = new Stats(0, 0, 0, 0, 0, 0, 0);
             }
 
-            champions.add(new Champion(id, name, roles, baseStats, perLevelGrowth));
+            Champion champion = new Champion(id, name, roles, baseStats, perLevelGrowth);
+
+            // damageType isn't in Data Dragon at all - only CDragon's
+            // champions/{id}.json has tacticalInfo.damageType, so this is
+            // the one remaining reason fetchChampionDetail gets called per
+            // champion. If that ever changes (e.g. Data Dragon adds it),
+            // this per-champion call can go away entirely.
+            try {
+                String detailJson = client.fetchChampionDetail(id);
+                champion.setDamageType(parseDamageType(detailJson));
+            } catch (RuntimeException e) {
+                // Don't fail the whole champion load over one champion's
+                // detail fetch failing - fall back to UNKNOWN (Champion's
+                // default) rather than losing the champion entirely.
+                champion.setDamageType(DamageType.UNKNOWN);
+            }
+
+            champions.add(champion);
         }
         return champions;
+    }
+
+    /**
+     * tacticalInfo.damageType comes back as "kPhysical", "kMagic", or
+     * "kMixed" (confirmed directly against a real champions/{id}.json
+     * response, e.g. Aatrox: tacticalInfo.damageType == "kPhysical") -
+     * strip the "k" prefix and map to DamageType, falling back to UNKNOWN
+     * for anything unrecognized rather than guessing.
+     */
+    private DamageType parseDamageType(String championDetailJson) {
+        JsonObject root = JsonParser.parseString(championDetailJson).getAsJsonObject();
+        if (!root.has("tacticalInfo")) {
+            return DamageType.UNKNOWN;
+        }
+        JsonObject tacticalInfo = root.getAsJsonObject("tacticalInfo");
+        if (!tacticalInfo.has("damageType")) {
+            return DamageType.UNKNOWN;
+        }
+        String raw = tacticalInfo.get("damageType").getAsString();
+        String stripped = raw.startsWith("k") ? raw.substring(1) : raw;
+        try {
+            return DamageType.valueOf(stripped.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            return DamageType.UNKNOWN;
+        }
     }
 
     private List<Role> parseRoles(JsonArray rolesJson) {
@@ -246,13 +305,43 @@ public class CacheManager {
         return statsJson.has(key) ? statsJson.get(key).getAsDouble() : 0.0;
     }
 
-    private double itemStatValue(JsonObject statsJson, String... possibleKeys) {
-        for (String key : possibleKeys) {
-            if (statsJson.has(key) && statsJson.get(key).isJsonPrimitive()) {
-                return statsJson.get(key).getAsDouble();
+    /**
+     * runesReforged.json is a top-level JSON ARRAY of 5 rune trees
+     * (Precision, Domination, Sorcery, Resolve, Inspiration), each with a
+     * "slots" array; slot 0 in every tree holds the 4 keystone options,
+     * slots 1-3 hold the minor-row runes. treeId/treeName get denormalized
+     * onto every Rune (see Rune's javadoc for why) rather than kept only
+     * on a parent tree object.
+     */
+    private List<Rune> fetchAllRunes() {
+        String version = dataDragonClient.fetchLatestVersion();
+        JsonArray trees = JsonParser.parseString(dataDragonClient.fetchRuneData(version)).getAsJsonArray();
+
+        List<Rune> runes = new ArrayList<>();
+        for (JsonElement treeElement : trees) {
+            JsonObject tree = treeElement.getAsJsonObject();
+            int treeId = tree.get("id").getAsInt();
+            String treeName = tree.get("name").getAsString();
+
+            JsonArray slots = tree.getAsJsonArray("slots");
+            for (int slotIndex = 0; slotIndex < slots.size(); slotIndex++) {
+                boolean isKeystoneSlot = slotIndex == 0;
+                JsonArray slotRunes = slots.get(slotIndex).getAsJsonObject().getAsJsonArray("runes");
+                for (JsonElement runeElement : slotRunes) {
+                    JsonObject r = runeElement.getAsJsonObject();
+                    runes.add(new Rune(
+                            r.get("id").getAsInt(),
+                            r.get("key").getAsString(),
+                            r.get("name").getAsString(),
+                            r.has("shortDesc") ? r.get("shortDesc").getAsString() : "",
+                            treeId,
+                            treeName,
+                            isKeystoneSlot
+                    ));
+                }
             }
         }
-        return 0.0;
+        return runes;
     }
 
     /**
@@ -338,6 +427,4 @@ public class CacheManager {
     public void setCachedPatchVersion(String cachedPatchVersion) {
         this.cachedPatchVersion = cachedPatchVersion;
     }
-
-    private final DataDragonClient dataDragonClient = new DataDragonClient();
 }

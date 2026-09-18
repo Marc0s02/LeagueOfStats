@@ -9,6 +9,15 @@ public class Champion {
     private List<Role> roles;
     private Stats baseStats;
     private Stats perLevelGrowth;
+    private DamageType damageType = DamageType.UNKNOWN;
+
+    public DamageType getDamageType() {
+        return damageType;
+    }
+
+    public void setDamageType(DamageType damageType) {
+        this.damageType = damageType;
+    }
 
     public Champion() {
     }

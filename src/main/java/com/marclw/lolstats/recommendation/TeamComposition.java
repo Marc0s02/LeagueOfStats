@@ -2,6 +2,7 @@ package com.marclw.lolstats.recommendation;
 
 import com.marclw.lolstats.model.Champion;
 import com.marclw.lolstats.model.Role;
+import com.marclw.lolstats.model.DamageType;
 
 import java.util.List;
 
@@ -49,6 +50,21 @@ public class TeamComposition {
         }
         return champions.stream()
                 .filter(c -> c.getRoles() != null && c.getRoles().contains(role))
+                .count();
+    }
+
+    /**
+     * Same idea as countByRole, but keyed on the real damage-type tag
+     * (Champion.damageType) rather than the Role-based proxy the original
+     * heuristic used - see HeuristicBuildRecommender's javadoc for why that
+     * proxy was replaced.
+     */
+    public long countByDamageType(com.marclw.lolstats.model.DamageType damageType) {
+        if (champions == null) {
+            return 0;
+        }
+        return champions.stream()
+                .filter(c -> c.getDamageType() == damageType)
                 .count();
     }
 }
