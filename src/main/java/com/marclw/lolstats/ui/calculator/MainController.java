@@ -159,6 +159,16 @@ public class MainController {
         }
     }
 
+    /**
+     * Called by the "Open Advisor" button.
+     */
+    @FXML
+    public void onSwitchToAdvisor() {
+        if (viewManager != null) {
+            viewManager.showAdvisorView();
+        }
+    }
+
     public ChampionRepository getChampionRepository() {
         return championRepository;
     }

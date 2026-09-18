@@ -11,6 +11,7 @@ com\marclw\lolstats\ingest\CacheManager.class
 com\marclw\lolstats\ingest\RuneRepository.class
 com\marclw\lolstats\recommendation\GameState$Source.class
 com\marclw\lolstats\model\MatchRecord$PlayerStats.class
+com\marclw\lolstats\stats\ChampionItemMatchupRecord.class
 com\marclw\lolstats\ingest\CacheManager$4.class
 com\marclw\lolstats\stats\MatchupStatsStore$1.class
 com\marclw\lolstats\ui\prediction\PredictionController$1.class
@@ -32,6 +33,7 @@ com\marclw\lolstats\recommendation\TeamComposition.class
 com\marclw\lolstats\stats\MatchupStatsStore$2.class
 com\marclw\lolstats\model\MatchRecord.class
 com\marclw\lolstats\stats\ChampionMatchupRecord.class
+com\marclw\lolstats\stats\MatchupStatsStore$5.class
 com\marclw\lolstats\model\Stats.class
 com\marclw\lolstats\storage\ModelRegistry.class
 com\marclw\lolstats\ingest\ChampionRepository.class
@@ -51,6 +53,7 @@ com\marclw\lolstats\model\Champion.class
 com\marclw\lolstats\ingest\GameStateProvider.class
 com\marclw\lolstats\prediction\ModelScorer.class
 com\marclw\lolstats\model\Role.class
+com\marclw\lolstats\stats\MatchupStatsStore$6.class
 com\marclw\lolstats\ingest\MatchFetcher$Batch.class
 com\marclw\lolstats\training\ModelTrainer.class
 com\marclw\lolstats\training\TrainingPipelineRunner.class

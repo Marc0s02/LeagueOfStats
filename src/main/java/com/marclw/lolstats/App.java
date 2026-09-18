@@ -8,8 +8,14 @@ import com.marclw.lolstats.ingest.ChampionRepository;
 import com.marclw.lolstats.ingest.ItemRepository;
 import com.marclw.lolstats.ingest.MatchDataParser;
 import com.marclw.lolstats.ingest.RiotMatchClient;
+import com.marclw.lolstats.ingest.RuneRepository;
 import com.marclw.lolstats.prediction.PredictionService;
+import com.marclw.lolstats.recommendation.BuildRecommender;
+import com.marclw.lolstats.recommendation.HeuristicBuildRecommender;
+import com.marclw.lolstats.recommendation.RecommendationSettings;
+import com.marclw.lolstats.recommendation.StatsAugmentedBuildRecommender;
 import com.marclw.lolstats.service.StatCalculator;
+import com.marclw.lolstats.stats.MatchupStatsStore;
 import com.marclw.lolstats.storage.ModelRegistry;
 import com.marclw.lolstats.ui.ViewManager;
 import javafx.application.Application;
@@ -36,6 +42,7 @@ public class App extends Application {
                 Path.of(System.getProperty("user.home"), ".lolstats"), cDragonClient);
         ChampionRepository championRepository = new ChampionRepository(cacheManager);
         ItemRepository itemRepository = new ItemRepository(cacheManager);
+        RuneRepository runeRepository = new RuneRepository(cacheManager);
         StatCalculator statCalculator = new StatCalculator();
 
         // --- Prediction wiring -------------------------------------------
@@ -63,8 +70,24 @@ public class App extends Application {
                     + "Champion comparison still works.");
         }
 
+        // --- Advisor wiring ------------------------------------------------
+        // MatchupStatsStore.load() is safe to call even when nothing has
+        // ever been written to dataDirectory/stats - readGzipped returns
+        // null for a missing file and load() turns that into empty maps,
+        // so mostPopularItemIdsForMatchup/winRateForMatchup simply return
+        // null/empty until an offline stats-building run actually produces
+        // that data. The advisor screen works with pure heuristics either way.
+        MatchupStatsStore matchupStatsStore = new MatchupStatsStore(dataDirectory.resolve("stats"));
+        matchupStatsStore.load();
+
+        RecommendationSettings recommendationSettings = new RecommendationSettings();
+        BuildRecommender baseBuildRecommender = new HeuristicBuildRecommender(itemRepository);
+        BuildRecommender buildRecommender = new StatsAugmentedBuildRecommender(
+                baseBuildRecommender, matchupStatsStore, recommendationSettings);
+
         ViewManager viewManager = new ViewManager(
-                primaryStage, championRepository, itemRepository, statCalculator, predictionService);
+                primaryStage, championRepository, itemRepository, runeRepository,
+                statCalculator, predictionService, buildRecommender, recommendationSettings);
         viewManager.showCalculatorView();
 
         primaryStage.show();

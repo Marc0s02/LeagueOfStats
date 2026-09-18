@@ -141,6 +141,13 @@ public class PredictionController {
         }
     }
 
+    @FXML
+    public void onSwitchToAdvisor() {
+        if (viewManager != null) {
+            viewManager.showAdvisorView();
+        }
+    }
+
     public PredictionService getPredictionService() {
         return predictionService;
     }

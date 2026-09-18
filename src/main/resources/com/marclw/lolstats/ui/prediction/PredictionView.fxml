@@ -84,6 +84,8 @@
             <!-- Hands off to ViewManager.showCalculatorView() -->
             <Button fx:id="switchToCalculatorButton" text="Back to Stat Calculator"
                     onAction="#onSwitchToCalculator" />
+            <Button fx:id="switchToAdvisorButton" text="Open Advisor"
+                    onAction="#onSwitchToAdvisor" />
         </HBox>
     </bottom>
 </BorderPane>

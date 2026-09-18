@@ -2,8 +2,12 @@ package com.marclw.lolstats.ui;
 
 import com.marclw.lolstats.ingest.ChampionRepository;
 import com.marclw.lolstats.ingest.ItemRepository;
+import com.marclw.lolstats.ingest.RuneRepository;
 import com.marclw.lolstats.prediction.PredictionService;
+import com.marclw.lolstats.recommendation.BuildRecommender;
+import com.marclw.lolstats.recommendation.RecommendationSettings;
 import com.marclw.lolstats.service.StatCalculator;
+import com.marclw.lolstats.ui.advisor.AdvisorController;
 import com.marclw.lolstats.ui.calculator.MainController;
 import com.marclw.lolstats.ui.prediction.PredictionController;
 import javafx.fxml.FXMLLoader;
@@ -29,19 +33,28 @@ public class ViewManager {
 
     private final ChampionRepository championRepository;
     private final ItemRepository itemRepository;
+    private final RuneRepository runeRepository;
     private final StatCalculator statCalculator;
     private final PredictionService predictionService;
+    private final BuildRecommender buildRecommender;
+    private final RecommendationSettings recommendationSettings;
 
     public ViewManager(Stage primaryStage,
                        ChampionRepository championRepository,
                        ItemRepository itemRepository,
+                       RuneRepository runeRepository,
                        StatCalculator statCalculator,
-                       PredictionService predictionService) {
+                       PredictionService predictionService,
+                       BuildRecommender buildRecommender,
+                       RecommendationSettings recommendationSettings) {
         this.primaryStage = primaryStage;
         this.championRepository = championRepository;
         this.itemRepository = itemRepository;
+        this.runeRepository = runeRepository;
         this.statCalculator = statCalculator;
         this.predictionService = predictionService;
+        this.buildRecommender = buildRecommender;
+        this.recommendationSettings = recommendationSettings;
     }
 
     public void showCalculatorView() {
@@ -77,6 +90,28 @@ public class ViewManager {
 
             primaryStage.setScene(new Scene(root));
             primaryStage.setTitle("LeagueOfStats - Match Prediction");
+        } catch (IOException | RuntimeException e) {
+            // TODO: replace with real error handling/logging
+            e.printStackTrace();
+        }
+    }
+
+    public void showAdvisorView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/marclw/lolstats/ui/advisor/AdvisorView.fxml"));
+            Parent root = loader.load();
+
+            AdvisorController controller = loader.getController();
+            controller.setChampionRepository(championRepository);
+            controller.setRuneRepository(runeRepository);
+            controller.setBuildRecommender(buildRecommender);
+            controller.setRecommendationSettings(recommendationSettings);
+            controller.setViewManager(this);
+            controller.populateData();
+
+            primaryStage.setScene(new Scene(root));
+            primaryStage.setTitle("LeagueOfStats - Build & Rune Advisor");
         } catch (IOException | RuntimeException e) {
             // TODO: replace with real error handling/logging
             e.printStackTrace();
