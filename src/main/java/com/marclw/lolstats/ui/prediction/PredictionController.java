@@ -116,13 +116,21 @@ public class PredictionController {
 
         predictionBasisLabel.setText(describeBasis(finalResult));
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Blue win probability");
+        XYChart.Series<Number, Number> blueSeries = new XYChart.Series<>();
+        blueSeries.setName("Blue win probability");
+        XYChart.Series<Number, Number> redSeries = new XYChart.Series<>();
+        redSeries.setName("Red win probability");
+
         for (WinProbabilityResult result : results) {
-            series.getData().add(new XYChart.Data<>(result.getMinute(), result.getBlueWinProbability()));
+            blueSeries.getData().add(new XYChart.Data<>(result.getMinute(), result.getBlueWinProbability()));
+            redSeries.getData().add(new XYChart.Data<>(result.getMinute(), result.getRedWinProbability()));
         }
+
         probabilityChart.getData().clear();
-        probabilityChart.getData().add(series);
+        // Order matters for styling: this is series index 0/1, matched to the
+        // .default-color0/.default-color1 CSS selectors in styles.css.
+        probabilityChart.getData().add(blueSeries);
+        probabilityChart.getData().add(redSeries);
     }
 
     private String describeBasis(WinProbabilityResult result) {

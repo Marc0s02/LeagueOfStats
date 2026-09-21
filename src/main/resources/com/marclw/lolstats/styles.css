@@ -388,3 +388,24 @@
     -fx-stroke: #6ea8ed;
     -fx-stroke-width: 2px;
 }
+
+.probability-chart .default-color1.chart-series-line {
+    -fx-stroke: #e47a83;
+    -fx-stroke-width: 2px;
+}
+
+.probability-chart .chart-legend {
+    -fx-background-color: transparent;
+}
+
+.probability-chart .chart-legend-item-symbol.default-color0 {
+    -fx-background-color: #6ea8ed;
+}
+
+.probability-chart .chart-legend-item-symbol.default-color1 {
+    -fx-background-color: #e47a83;
+}
+
+.probability-chart .chart-legend .label {
+    -fx-text-fill: #b7c2d2;
+}
