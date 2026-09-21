@@ -32,7 +32,7 @@ public class ModelTrainer {
         double[][] x = toDesignMatrix(trainingRows);
         int[] y = toLabels(trainingRows);
         requireBothClassesPresent(y);
-        return LogisticRegression.fit(x, y);
+        return LogisticRegression.fit(x, y, 0.3, 1E-5, 500);
     }
 
     /**
