@@ -71,9 +71,11 @@ public class PredictionService {
         // finished match we technically know it, but feeding it in would
         // make the prediction meaningless.)
         FeatureVector vector = featureExtractor.extract(record, timeline, minute);
-
         double blueWinProbability = ModelScorer.blueWinProbability(model(), vector);
-        return new WinProbabilityResult(matchId, minute, blueWinProbability);
+        WinProbabilityResult result = new WinProbabilityResult(matchId, minute, blueWinProbability);
+        result.setFeatures(vector.getFeatures());
+        return result;
+
     }
 
     /**
@@ -91,8 +93,10 @@ public class PredictionService {
         WinProbabilityResult[] results = new WinProbabilityResult[throughMinute];
         for (int minute = 1; minute <= throughMinute; minute++) {
             FeatureVector vector = featureExtractor.extract(record, timeline, minute);
-            results[minute - 1] = new WinProbabilityResult(
-                    matchId, minute, ModelScorer.blueWinProbability(model(), vector));
+            double blueWinProbability = ModelScorer.blueWinProbability(model(), vector);
+            WinProbabilityResult result = new WinProbabilityResult(matchId, minute, blueWinProbability);
+            result.setFeatures(vector.getFeatures());
+            results[minute - 1] = result;
         }
         return results;
     }

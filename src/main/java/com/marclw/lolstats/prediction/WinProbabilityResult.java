@@ -14,6 +14,16 @@ public class WinProbabilityResult {
     public WinProbabilityResult() {
     }
 
+    private java.util.Map<String, Double> features;
+
+    public java.util.Map<String, Double> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(java.util.Map<String, Double> features) {
+        this.features = features;
+    }
+
     public WinProbabilityResult(String matchId, int minute, double blueWinProbability) {
         this.matchId = matchId;
         this.minute = minute;
