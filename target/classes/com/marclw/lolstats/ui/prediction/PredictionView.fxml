@@ -84,13 +84,13 @@
 
                 <VBox styleClass="detail-panel" spacing="10">
                     <Label text="PROBABILITY OVER TIME" styleClass="section-title"/>
-                    <LineChart fx:id="probabilityChart" legendVisible="false" createSymbols="false"
+                    <LineChart fx:id="probabilityChart" legendVisible="true" createSymbols="false"
                                prefHeight="320" styleClass="probability-chart">
                         <xAxis>
                             <NumberAxis label="Minute"/>
                         </xAxis>
                         <yAxis>
-                            <NumberAxis label="Blue win probability" lowerBound="0" upperBound="1"
+                            <NumberAxis label="Win probability" lowerBound="0" upperBound="1"
                                         autoRanging="false" tickUnit="0.1"/>
                         </yAxis>
                     </LineChart>

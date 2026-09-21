@@ -14,6 +14,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Wires up the match-prediction screen: match-ID input, a minute selector,
@@ -43,11 +45,18 @@ public class PredictionController {
     @FXML private LineChart<Number, Number> probabilityChart;
     @FXML private Label predictionBasisLabel;
 
+    private final XYChart.Series<Number, Number> blueSeries = new XYChart.Series<>();
+    private final XYChart.Series<Number, Number> redSeries = new XYChart.Series<>();
+
     public void initialize() {
         minuteSpinner.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 60, 15));
         statusLabel.setText("Enter a match ID and press Predict.");
         blueProbabilityBar.setProgress(0);
+        blueSeries.setName("Blue win probability");
+        redSeries.setName("Red win probability");
+        probabilityChart.getData().add(blueSeries);
+        probabilityChart.getData().add(redSeries);
     }
 
     /**
@@ -116,21 +125,14 @@ public class PredictionController {
 
         predictionBasisLabel.setText(describeBasis(finalResult));
 
-        XYChart.Series<Number, Number> blueSeries = new XYChart.Series<>();
-        blueSeries.setName("Blue win probability");
-        XYChart.Series<Number, Number> redSeries = new XYChart.Series<>();
-        redSeries.setName("Red win probability");
-
+        List<XYChart.Data<Number, Number>> blueData = new ArrayList<>();
+        List<XYChart.Data<Number, Number>> redData = new ArrayList<>();
         for (WinProbabilityResult result : results) {
-            blueSeries.getData().add(new XYChart.Data<>(result.getMinute(), result.getBlueWinProbability()));
-            redSeries.getData().add(new XYChart.Data<>(result.getMinute(), result.getRedWinProbability()));
+            blueData.add(new XYChart.Data<>(result.getMinute(), result.getBlueWinProbability()));
+            redData.add(new XYChart.Data<>(result.getMinute(), result.getRedWinProbability()));
         }
-
-        probabilityChart.getData().clear();
-        // Order matters for styling: this is series index 0/1, matched to the
-        // .default-color0/.default-color1 CSS selectors in styles.css.
-        probabilityChart.getData().add(blueSeries);
-        probabilityChart.getData().add(redSeries);
+        blueSeries.getData().setAll(blueData);
+        redSeries.getData().setAll(redData);
     }
 
     private String describeBasis(WinProbabilityResult result) {
