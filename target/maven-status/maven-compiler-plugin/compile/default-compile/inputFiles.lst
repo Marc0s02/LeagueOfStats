@@ -10,6 +10,7 @@ D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\inge
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\GameStateProvider.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\HistoricalDatasetLoader.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\ItemRepository.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\ItemRules.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\LiveGameStateProvider.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\ManualGameStateProvider.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\ingest\MatchDataParser.java
@@ -23,6 +24,7 @@ D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\mode
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\Champion.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\DamageType.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\FeatureVector.java
+D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\GameMode.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\Item.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\MatchRecord.java
 D:\Coding\Personal projects\LeagueOfStats\src\main\java\com\marclw\lolstats\model\MatchTimeline.java
