@@ -346,3 +346,66 @@
     -fx-background-color: #2c384b;
     -fx-background-radius: 5px;
 }
+
+.probability-bar {
+    -fx-accent: #6ea8ed;
+}
+
+.probability-bar > .bar {
+    -fx-background-color: #6ea8ed;
+    -fx-background-insets: 0;
+    -fx-background-radius: 6;
+    -fx-padding: 13px;
+}
+
+.probability-bar > .track {
+    -fx-background-color: #3a2028;
+    -fx-background-radius: 6;
+}
+
+.probability-chart {
+    -fx-background-color: transparent;
+}
+
+.probability-chart .chart-plot-background {
+    -fx-background-color: #0c1119;
+}
+
+.probability-chart .chart-vertical-grid-lines,
+.probability-chart .chart-horizontal-grid-lines {
+    -fx-stroke: #202938;
+}
+
+.probability-chart .axis {
+    -fx-tick-label-fill: #77859a;
+}
+
+.probability-chart .axis-label {
+    -fx-text-fill: #b7c2d2;
+}
+
+.probability-chart .default-color0.chart-series-line {
+    -fx-stroke: #6ea8ed;
+    -fx-stroke-width: 2px;
+}
+
+.probability-chart .default-color1.chart-series-line {
+    -fx-stroke: #e47a83;
+    -fx-stroke-width: 2px;
+}
+
+.probability-chart .chart-legend {
+    -fx-background-color: transparent;
+}
+
+.probability-chart .chart-legend-item-symbol.default-color0 {
+    -fx-background-color: #6ea8ed;
+}
+
+.probability-chart .chart-legend-item-symbol.default-color1 {
+    -fx-background-color: #e47a83;
+}
+
+.probability-chart .chart-legend .label {
+    -fx-text-fill: #b7c2d2;
+}

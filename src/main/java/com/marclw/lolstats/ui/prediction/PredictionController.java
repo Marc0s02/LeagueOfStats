@@ -14,6 +14,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Wires up the match-prediction screen: match-ID input, a minute selector,
@@ -41,12 +43,20 @@ public class PredictionController {
     @FXML private Label redProbabilityLabel;
     @FXML private ProgressBar blueProbabilityBar;
     @FXML private LineChart<Number, Number> probabilityChart;
+    @FXML private Label predictionBasisLabel;
+
+    private final XYChart.Series<Number, Number> blueSeries = new XYChart.Series<>();
+    private final XYChart.Series<Number, Number> redSeries = new XYChart.Series<>();
 
     public void initialize() {
         minuteSpinner.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 60, 15));
         statusLabel.setText("Enter a match ID and press Predict.");
         blueProbabilityBar.setProgress(0);
+        blueSeries.setName("Blue win probability");
+        redSeries.setName("Red win probability");
+        probabilityChart.getData().add(blueSeries);
+        probabilityChart.getData().add(redSeries);
     }
 
     /**
@@ -113,13 +123,42 @@ public class PredictionController {
                 "Win probability as of minute %d of match %s.",
                 finalResult.getMinute(), finalResult.getMatchId()));
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Blue win probability");
+        predictionBasisLabel.setText(describeBasis(finalResult));
+
+        List<XYChart.Data<Number, Number>> blueData = new ArrayList<>();
+        List<XYChart.Data<Number, Number>> redData = new ArrayList<>();
         for (WinProbabilityResult result : results) {
-            series.getData().add(new XYChart.Data<>(result.getMinute(), result.getBlueWinProbability()));
+            blueData.add(new XYChart.Data<>(result.getMinute(), result.getBlueWinProbability()));
+            redData.add(new XYChart.Data<>(result.getMinute(), result.getRedWinProbability()));
         }
-        probabilityChart.getData().clear();
-        probabilityChart.getData().add(series);
+        blueSeries.getData().setAll(blueData);
+        redSeries.getData().setAll(redData);
+    }
+
+    private String describeBasis(WinProbabilityResult result) {
+        java.util.Map<String, Double> features = result.getFeatures();
+        if (features == null) {
+            return "Feature breakdown unavailable for this prediction.";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(diffLine("Gold", features.get("goldDiffAtMinute"), false));
+        sb.append(diffLine("XP", features.get("xpDiffAtMinute"), false));
+        sb.append(diffLine("Kills", features.get("killDiffAtMinute"), true));
+        sb.append(diffLine("Dragons", features.get("dragonDiffAtMinute"), true));
+        sb.append(diffLine("Heralds", features.get("heraldDiffAtMinute"), true));
+        sb.append(diffLine("Towers", features.get("towerDiffAtMinute"), true));
+        return sb.toString().stripTrailing();
+    }
+
+    private String diffLine(String label, Double diff, boolean wholeNumber) {
+        if (diff == null) {
+            return String.format("%-9s n/a%n", label + ":");
+        }
+        String magnitude = wholeNumber
+                ? String.valueOf(Math.abs(diff.intValue()))
+                : String.format("%,.0f", Math.abs(diff));
+        String who = diff > 0 ? "Blue ahead" : diff < 0 ? "Red ahead" : "Even";
+        return String.format("%-9s %s (%s)%n", label + ":", magnitude, who);
     }
 
     private void setBusy(boolean busy) {
